@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'css/index.css' %}">
+        <title>User Dashboard</title>
+    </head>
+    <body class="amazon-theme">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="logo">
+                <a href="{% url 'index' %}"><img
+                        src="{% static 'images/logo.png' %}" alt="Logo"
+                        class="logo-img"></a>
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'index' %}">Home</a>
+               
+              
+            <!-- <a href="{% url 'add' %}">Add Gallery</a> --> 
+                <a href="{% url 'logout' %}">Logout</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1>User Dashboard</h1>
+            <div class="gallery">
+                {% for i in gallery_images %}
+                <a href="{% url 'product' i.id %}"><div class="gallery-item">
+                        <img src="{{ i.feedimage.url }}" alt="Gallery Image"
+                            width="300">
+                        <div class="image-info">
+                            <p class="image-title">{{ i.title1 }}</p>
+                            <p class="image-date">{{ i.title2 }}</p>
+                            <p class="image-course">{{ i.title3 }}</p>
+                        </div>
+                    </div></a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="foot">
+            <div class="foot1">
+              <ul style="list-style-type: none;">
+                <li><img src="./images/logo.png" alt=""></li>
+                <li><img src="./images/foot1.jpeg" alt="" class="footimg"></li>
+                <li>© All rights reserved by watch, Cochin, India.</li>
+              </ul>
+            </div>
+            <div class="foot2">
+              <ul style="list-style-type: none;">
+                <li><b>SOLUTIONS</b></li>
+                <br>
+                <li>My account</li>
+                <li>Track Your Order</li>
+                <li>Order History</li>
+                <li>Payment Methods</li>
+                <li>Privacy Policy</li>
+        
+              </ul>
+            </div>
+            <div class="foot3">
+              <ul style="list-style-type: none;">
+                <li><b>ABOUT US</b></li>
+                <br>
+                <li>About Us</li>
+                <li> Terms & Conditions</li>
+                <li>Privacy Policy</li>
+                <li>Return Policy</li>
+                <li> Site Map</li>
+        
+              </ul>
+            </div>
+            <div class="foot4">
+              <ul style="list-style-type:none">
+                <li><b>CONTACT US</b></li>
+                <br><br>
+                <li> <i class="bi bi-geo-alt"></i>
+                  Kureekkadu, Ernakulam, Kerala</li>
+        
+                <li> <i class="bi bi-telephone"></i> +91-86065 70657</li>
+                <li> <i class="bi bi-clock"></i> Mon - Sat / 9:00AM - 6:00PM</li>
+              </ul>
+            </div>
+          </div>
+    </body>
+</html>
