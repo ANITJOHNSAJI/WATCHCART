@@ -129,7 +129,10 @@ def userlogin(request):
         if user is not None:
             login(request, user)
             request.session['username'] = username
-            return redirect('index')  
+            if user.is_superuser:
+                 return redirect('firstpage')
+            return redirect('index') 
+             
         else:
             messages.error(request, "Invalid credentials.")
 
