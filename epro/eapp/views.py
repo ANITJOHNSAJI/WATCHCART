@@ -34,6 +34,28 @@ def usersignup(request):
             return redirect('userlogin') 
 
     return render(request, "register.html")
+
+def userlogin(request):
+    if 'username' in request.session:
+        return redirect('index')  
+    
+    elif request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            request.session['username'] = username
+            if user.is_superuser:
+                 return redirect('firstpage')
+            return redirect('index') 
+             
+        else:
+            messages.error(request, "Invalid credentials.")
+
+    return render(request, 'userlogin.html')
+
 def verifyotp(request):
     if request.POST:
         otp = request.POST.get('otp')
@@ -117,26 +139,9 @@ def passwordreset(request):
 
     return render(request, "passwordreset.html")
 
-def userlogin(request):
-    if 'username' in request.session:
-        return redirect('index')  
-    
-    elif request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        
-        if user is not None:
-            login(request, user)
-            request.session['username'] = username
-            if user.is_superuser:
-                 return redirect('firstpage')
-            return redirect('index') 
-             
-        else:
-            messages.error(request, "Invalid credentials.")
+def firstpage(request):
+    return(request,"firstpage.html")
 
-    return render(request, 'userlogin.html')
 
 def index(request):
     # return render(request, 'index.html')

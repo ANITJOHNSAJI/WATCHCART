@@ -9,6 +9,7 @@ urlpatterns = [
     path('forgotpassword',views.getusername,name='forgotpassword'),
     path('verifyotp',views.verifyotp,name='verifyotp'),
     path('passwordreset',views.passwordreset,name='passwordreset'),
-    path('logout',views.logoutuser,name="logout"),
+    path('logout/', views.logoutuser, name="logout"),
+    path('firstpage',views.firstpage,name='firstpage'),
     
 ]
