@@ -1,124 +1,78 @@
-/* General Body Styles */
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
+    background-image: url('../images/bg.jpg');
+    background-size: cover;
+    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: linear-gradient(135deg, #e1e1e1, #ffffff);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    overflow: hidden;
+    margin: 0;
 }
 
-/* Container for the Login Form */
 div {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 35px 50px;
-    border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    width: 100%;
-    max-width: 380px;
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+    padding: 30px; /* Increased padding for better spacing */
+    border-radius: 10px;
+    backdrop-filter: blur(10px); /* Blurry glass effect */
     text-align: center;
-    transition: transform 0.4s ease-in-out;
+    width: 350px; /* Increased width for better alignment */
 }
 
-div:hover {
-    transform: scale(1.02); /* Slightly enlarge the login box on hover */
-}
-
-/* Heading Styles */
 h1 {
-    color: #222;
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    font-family: 'Roboto', sans-serif;
-    letter-spacing: 1px;
+    color: goldenrod; /* Golden color for header text */
+    margin-bottom: 20px; /* Added margin for space between heading and form */
 }
 
-/* Form Styles */
 form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-}
-
-/* Input Fields */
-input[type="text"],
-input[type="password"] {
-    padding: 16px;
-    font-size: 1rem;
-    border-radius: 10px;
-    border: 2px solid #ddd;
+    align-items: center;
     width: 100%;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-    background: #f9f9f9;
-    color: #333;
-    outline: none;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus {
-    border-color: #1f5f98;
-    background: #e6f0ff;
-    box-shadow: 0 0 8px rgba(31, 95, 152, 0.5);
+input[type="text"], input[type="password"], input[type="submit"] {
+    width: 90%; /* Set width to 90% for input fields */
+    padding: 12px; /* Increased padding for more comfortable inputs */
+    margin: 12px 0; /* Increased margin between input fields */
+    border: 2px solid black; /* Black border for input fields */
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.2); /* Transparent black background */
+    color: goldenrod; /* Set text color to yellow */
+    font-size: 16px; /* Improved font size for readability */
 }
 
-/* Submit Button */
+input::placeholder {
+    color: goldenrod; /* Set placeholder text color to golden */
+}
+
 input[type="submit"] {
-    background-color: #1f5f98;
-    color: white;
-    padding: 15px;
-    font-size: 1rem;
-    border-radius: 10px;
+    background: black; /* Black background for submit button */
+    color: goldenrod; /* Golden text color for submit button */
     cursor: pointer;
-    border: none;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-weight: bold;
+    border: 2px solid goldenrod; /* Golden border for the button */
+    padding: 12px; /* Increased padding for better clickability */
+    margin-top: 10px; /* Added space above the submit button */
+    transition: background 0.3s ease, transform 0.3s ease; /* Add transition for hover effect */
 }
 
 input[type="submit"]:hover {
-    background-color: #19528e;
-    transform: translateY(-2px);
+    background: goldenrod; /* Golden background on hover */
+    color: black; /* Black text on hover */
+    transform: scale(1.05); 
 }
 
-/* Links */
 a {
-    color: #1f5f98;
+    color: goldenrod;
     text-decoration: none;
-    font-size: 1rem;
+    display: block;
     margin-top: 10px;
-    display: inline-block;
-    transition: color 0.3s ease, transform 0.3s ease;
 }
 
 a:hover {
-    color: #0c3b60;
-    transform: translateY(-3px);
-}
+    text-decoration: underline;
 
-/* Result/Error Message */
 p {
-    color: #d9534f;
-    font-size: 1rem;
-    margin-top: 20px;
-    font-weight: bold;
+    color: #fff;
 }
-
-/* Responsive Design */
-@media (max-width: 480px) {
-    div {
-        padding: 25px 35px;
-        max-width: 90%;
-    }
-
-    h1 {
-        font-size: 2rem;
-    }
-
-    input[type="submit"] {
-        padding: 12px;
-    }
 }

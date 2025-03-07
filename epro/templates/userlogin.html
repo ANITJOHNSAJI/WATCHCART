@@ -13,9 +13,9 @@
 
         <form method="post">
             {% csrf_token %}
-            <input type="text" name="username" id="">
-            <input type="password" name="password" id="">
-            <input type="submit" value="submit">
+            <input type="text" name="username" placeholder="username">
+            <input type="password" name="password" placeholder="password">
+            <input type="submit" value="submit" placeholder="submit">
         </form>
         <a href="{% url 'forgotpassword' %}">forgotpassword</a>
         <a href="{% url 'usersignup' %}">signup</a>

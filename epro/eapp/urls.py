@@ -10,6 +10,9 @@ urlpatterns = [
     path('verifyotp',views.verifyotp,name='verifyotp'),
     path('passwordreset',views.passwordreset,name='passwordreset'),
     path('logout/', views.logoutuser, name="logout"),
-    path('firstpage',views.firstpage,name='firstpage'),
+    path('firstpage/', views.firstpage, name='firstpage'),
+    path('add',views.add,name="add"),
+    path('category',views.category,name="category"),
+    path('bookings',views.bookings,name="bookings"),
     
 ]
