@@ -1,16 +1,16 @@
 /* Decrease Carousel Image Height significantly */
 .carousel-inner img {
-    height: 30px; /* You can adjust this further if needed */
-    object-fit: contain; /* Keeps the aspect ratio of the images intact */
+    height: 700px; /* You can adjust this further if needed */
+    object-fit: fill; /* Keeps the aspect ratio of the images intact */
 }
 
 /* Optional: Center the carousel */
 .carousel-container {
-    max-width: 80%;
+    max-width: 100%;
     margin: auto;
 }
 
 /* Optional: Adjust Control Button Size */
 .carousel-control-prev, .carousel-control-next {
-    width: 5%;
+    width: 100%;
 }

@@ -10,6 +10,11 @@ from . models import *
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+def index(request):
+    # return render(request, 'index.html')
+    product = Product.objects.all()
+    return render(request,"index.html",{"product": product}) 
+
 def usersignup(request):
     if request.POST:
         email = request.POST.get('email')
@@ -138,10 +143,7 @@ def bookings(request):
     return render(request,'bookings.html')
 
 
-def index(request):
-    # return render(request, 'index.html')
-    # gallery_images = Gallery.objects.all()
-    return render(request, "index.html") #, {"gallery_images": gallery_images}
+
 
 def logoutuser(request):
     logout(request)
