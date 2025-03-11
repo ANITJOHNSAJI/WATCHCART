@@ -38,7 +38,7 @@
                         <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title">{{ product.name }}</h5>
-                            <p class="card-text">Weight: {{ product.quantity }}ml</p>
+                       
                             <p class="card-text"><del>₹{{ product.price }}</del> <strong>₹{{ product.offerprice }}</strong></p>
                             <a href="#" class="btn btn-primary btn-sm">Edit</a>
                             <a href="#" class="btn btn-danger btn-sm">Delete</a>
@@ -48,6 +48,16 @@
                 {% endfor %}
             </div>
         </div>
+        {% for i in gallery_images %}
+        <div>
+            <img src="{{ i.feedimage.url }}" alt="Gallery Image" width="300">
+            <p>{{ i.name }}</p>
+            <p>{{ i.price }}</p>
+            <p>{{ i.offerprice }}</p>
+            <a href="{% url 'delete_g' i.id %}"><button>delete</button></a>
+            <a href="{% url 'edit_g' i.id %}"><button>edit</button></a><br><br>
+        </div>
+        {% endfor %}
     
     </body>
     </html>

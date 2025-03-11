@@ -19,7 +19,147 @@
             </div>
         </div>
     </nav>
-    
+    {% if data1 %}
+    <form action="{% url 'edit_g' data1.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Product Image -->
+        <label for="image">Image:</label>
+        <input type="file" name="image" id="image" value="{{ data1.image.url }}" required><br><br>
+
+        <!-- Product Name -->
+        <label for="todo">Name:</label>
+        <input type="text" name="todo" class="ww" value="{{ data1.name }}"><br><br>
+
+        <!-- Product Colour -->
+        <label for="colour">Colour:</label>
+        <input type="text" name="colour" class="www" value="{{ data1.colour }}"><br><br>
+
+        <!-- Product Price -->
+        <label for="price">Price:</label>
+        <input type="text" name="price" class="ww" value="{{ data1.price }}"><br><br>
+
+        <!-- Offer Price -->
+        <label for="offerprice">Offer Price:</label>
+        <input type="text" name="offerprice" class="ww" value="{{ data1.offerprice }}"><br><br>
+
+        <!-- Product Review -->
+        <label for="review">Review:</label>
+        <textarea name="review" class="ww">{{ data1.review }}</textarea><br><br>
+
+        <!-- Product Description -->
+        <label for="description">Description:</label>
+        <textarea name="description" class="ww">{{ data1.description }}</textarea><br><br>
+
+        <!-- Product Gender -->
+        <label for="gender">Gender:</label>
+        <select name="gender" class="ww">
+            {% for gender in genders %}
+                <option value="{{ gender.id }}" {% if gender.id == data1.gender.id %}selected{% endif %}>{{ gender.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <!-- Product Brand -->
+        <label for="brand">Brand:</label>
+        <select name="brand" class="ww">
+            {% for brand in brands %}
+                <option value="{{ brand.id }}" {% if brand.id == data1.brand.id %}selected{% endif %}>{{ brand.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <!-- Product Type -->
+        <label for="type">Type:</label>
+        <select name="type" class="ww">
+            {% for type in types %}
+                <option value="{{ type.id }}" {% if type.id == data1.type.id %}selected{% endif %}>{{ type.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <!-- Product Quantity -->
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" class="ww" value="{{ data1.quantity }}"><br><br>
+
+        <!-- Submit Button -->
+        <button type="submit" class="cc">Submit</button>
+    </form>
+{% else %}
+    <form action="{% url 'add' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Product Image -->
+        <label for="image">Upload Image:</label>
+        <input type="file" name="image" id="image" required><br><br>
+
+        <!-- Product Name -->
+        <label for="todo">Name:</label>
+        <input type="text" name="todo" class="ww"><br><br>
+
+        <!-- Product Colour -->
+        <label for="colour">Colour:</label>
+        <input type="text" name="colour" class="ww"><br><br>
+
+        <!-- Product Price -->
+        <label for="price">Price:</label>
+        <input type="text" name="price" class="ww"><br><br>
+
+        <!-- Offer Price -->
+        <label for="offerprice">Offer Price:</label>
+        <input type="text" name="offerprice" class="ww"><br><br>
+
+        <!-- Product Review -->
+        <label for="review">Review:</label>
+        <textarea name="review" class="ww"></textarea><br><br>
+
+        <!-- Product Description -->
+        <label for="description">Description:</label>
+        <textarea name="description" class="ww"></textarea><br><br>
+
+        <!-- Product Gender -->
+        <label for="gender">Gender:</label>
+        <select name="gender" class="ww">
+            {% for gender in genders %}
+                <option value="{{ gender.id }}">{{ gender.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <!-- Product Brand -->
+        <label for="brand">Brand:</label>
+        <select name="brand" class="ww">
+            {% for brand in brands %}
+                <option value="{{ brand.id }}">{{ brand.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <!-- Product Type -->
+        <label for="type">Type:</label>
+        <select name="type" class="ww">
+            {% for type in types %}
+                <option value="{{ type.id }}">{{ type.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <!-- Product Quantity -->
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" class="ww"><br><br>
+
+        <!-- Submit Button -->
+        <button type="submit" class="cc">Submit</button>
+    </form>
+{% endif %}
+
+<!-- Display Images (if any) -->
+<div>
+    {% for i in gallery_images %}
+        {% if i.image %}
+            <img src="{{ i.image.url }}" alt="Gallery Image">
+        {% else %}
+            <p>No image for this gallery item</p>
+        {% endif %}
+    {% empty %}
+        <p>No images uploaded yet.</p>
+    {% endfor %}
+</div>
+
 
     
 </body>

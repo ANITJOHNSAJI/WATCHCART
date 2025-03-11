@@ -129,9 +129,6 @@ def passwordreset(request):
 
     return render(request, "passwordreset.html")
 
-def firstpage(request):
-    products = Product.objects.all()
-    return render(request, 'firstpage.html',{'products':products})
 
 def add(request):
     return render(request,'add.html')
@@ -149,3 +146,125 @@ def logoutuser(request):
     logout(request)
     request.session.flush()
     return redirect(userlogin)
+
+
+def delete_g(request,id):
+    feeds=Product.objects.filter(pk=id)
+    feeds.delete()
+    return redirect('firstpage')
+
+
+def edit_g(request, id):
+    # Fetch the product instance by ID
+    product = get_object_or_404(Product, pk=id)
+    
+    if request.method == 'POST':
+        # Fetch form data
+        name = request.POST.get('todo')
+        colour = request.POST.get('colour')
+        price = request.POST.get('price')
+        offerprice = request.POST.get('offerprice')
+        review = request.POST.get('review')
+        description = request.POST.get('description')
+        gender_id = request.POST.get('gender')
+        brand_id = request.POST.get('brand')
+        type_id = request.POST.get('type')
+        quantity = request.POST.get('quantity')
+        image = request.FILES.get('image')
+        
+        # Check if all necessary fields are filled out
+        if name and colour and price and offerprice and review and description and gender_id and brand_id and type_id and quantity:
+            # Update the product instance
+            product.name = name
+            product.colour = colour
+            product.price = price
+            product.offerprice = offerprice
+            product.review = review
+            product.description = description
+            product.gender_id = gender_id
+            product.brand_id = brand_id
+            product.type_id = type_id
+            product.quantity = quantity
+            
+            # Update the image if it's provided
+            if image:
+                product.image = image
+                
+            # Save the changes to the product
+            product.save()
+
+            return redirect('firstpage')  # Redirect to the 'firstpage' after success
+        else:
+            return render(request, 'add.html', {
+                'error': "All fields must be filled out.",
+                'data1': product,
+                'genders': Gender.objects.all(),
+                'brands': Brand.objects.all(),
+                'types': Type.objects.all()
+            })
+    
+    # If GET request, display the product details in the form
+    return render(request, 'add.html', {
+        'data1': product,
+        'genders': Gender.objects.all(),
+        'brands': Brand.objects.all(),
+        'types': Type.objects.all()
+    })
+
+
+# View to add a new product
+def add_product(request):
+    if request.method == 'POST':
+        # Fetch form data
+        name = request.POST.get('todo')
+        colour = request.POST.get('colour')
+        price = request.POST.get('price')
+        offerprice = request.POST.get('offerprice')
+        review = request.POST.get('review')
+        description = request.POST.get('description')
+        gender_id = request.POST.get('gender')
+        brand_id = request.POST.get('brand')
+        type_id = request.POST.get('type')
+        quantity = request.POST.get('quantity')
+        image = request.FILES.get('image')
+        
+        # Check if all necessary fields are filled out
+        if name and colour and price and offerprice and review and description and gender_id and brand_id and type_id and quantity:
+            # Create a new product instance
+            new_product = Product(
+                name=name,
+                colour=colour,
+                price=price,
+                offerprice=offerprice,
+                review=review,
+                description=description,
+                gender_id=gender_id,
+                brand_id=brand_id,
+                type_id=type_id,
+                quantity=quantity,
+                image=image
+            )
+            
+            # Save the product
+            new_product.save()
+
+            return redirect('firstpage')  # Redirect to the 'firstpage' after success
+        else:
+            return render(request, 'add.html', {
+                'error': "All fields must be filled out.",
+                'genders': Gender.objects.all(),
+                'brands': Brand.objects.all(),
+                'types': Type.objects.all()
+            })
+    
+    return render(request, 'add.html', {
+        'genders': Gender.objects.all(),
+        'brands': Brand.objects.all(),
+        'types': Type.objects.all()
+    })
+
+
+# View for the first page or gallery
+def first_page(request):
+    products = Product.objects.all()
+    return render(request, 'firstpage.html', {'products': products})
