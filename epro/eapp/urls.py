@@ -17,6 +17,8 @@ urlpatterns = [
     path('edit/<int:id>/', views.edit_g, name='edit_g'),
     path('add/', views.add_product, name='add'),
     path('firstpage/', views.first_page, name='firstpage'),
+    path('product/<int:id>/', views.product, name='product'),
+
     
 ]
 

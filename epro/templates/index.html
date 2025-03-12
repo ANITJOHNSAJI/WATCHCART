@@ -5,54 +5,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WatchCart</title>
-  <!-- Link to External CSS -->
   <link rel="stylesheet" href="{% static 'css/index.css' %}">
-  <!-- Bootstrap 5 CSS for Carousel only -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-light">
-        <div class="container">
-            <a class="navbar-brand" href="#">WATCHCART</a>
-            <div>
-                <a href="{% url 'index' %}"><button>Home</button></a>
-                <a href="{% url 'logout' %}"><button>Logout</button></a>
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="container">
+        <a class="navbar-brand" href="#">WATCHCART</a>
+        <div class="nav-links">
+            <a href="{% url 'index' %}"><button>Home</button></a>
+            <a href="{% url 'logout' %}"><button>Logout</button></a>
+            <div class="dropdown">
+                <button class="dropbtn">category</button>
+                <div class="dropdown-content">
+                    <a href="#">brand</a>
+                    <a href="#">type</a>
+                </div>
             </div>
         </div>
-    </nav>
-
-    <!-- Bootstrap Carousel -->
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{% static 'images/cl1.webp' %}" class="d-block w-100" alt="Background 1">
-            </div>
-            <div class="carousel-item">
-                <img src="{% static 'images/bg2.jpeg' %}" class="d-block w-100" alt="Background 2">
-            </div>
-            <div class="carousel-item">
-                <img src="{% static 'images/bg4.jpg' %}" class="d-block w-100" alt="Background 3">
-            </div>
+        <div class="menu-icon" id="menu-icon">
+            <span>&#9776;</span>
         </div>
-        <!-- Bootstrap Carousel Controls -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
     </div>
+</nav>
+
+
+
+
+
+
+    
+    <h2 class="titlep">products</h2>
 
     <!-- Product Cards -->
-    <div class="container mt-4">
+    <div class="mt-4">
+        {% for i in product %}
         <div class="row">
-            {% for i in product %}
             <div class="col-md-4">
                 <div class="card" style="width: 18rem;">
-                    <img src="{% static i.image %}" class="card-img-top">
+                    <a href="{% url 'product' i.id %}">
+                    <img src="{{i.image.url}}" class="card-img-top"></a>
                     <div class="card-body">
                         <h5 class="card-title">{{ i.name }}</h5>
                         <p class="card-text">{{ i.description }}</p>
@@ -60,12 +52,66 @@
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
+    <div class="foot">
+        <div class="foot1">
+          <ul style="list-style-type: none;">
+            <li><img src="./images/logo.png" alt=""></li>
+            <li><img src="./images/foot1.jpeg" alt="" class="footimg"></li>
+            <li>© All rights reserved by watchcart, Kottayam, India.</li>
+          </ul>
+        </div>
+        <div class="foot2">
+          <ul style="list-style-type: none;">
+            <li><b>SOLUTIONS</b></li>
+            <br>
+            <li>My account</li>
+            <li>Track Your Order</li>
+            <li>Order History</li>
+            <li>Payment Methods</li>
+            <li>Privacy Policy</li>
+    
+          </ul>
+        </div>
+        <div class="foot3">
+          <ul style="list-style-type: none;">
+            <li><b>ABOUT US</b></li>
+            <br>
+            <li>About Us</li>
+            <li> Terms & Conditions</li>
+            <li>Privacy Policy</li>
+            <li>Return Policy</li>
+            <li> Site Map</li>
+    
+          </ul>
+        </div>
+        <div class="foot4">
+          <ul style="list-style-type:none">
+            <li><b>CONTACT US</b></li>
+            <br><br>
+            <li> <i class="bi bi-geo-alt"></i>
+              Kureekkadu, Ernakulam, Kerala</li>
+    
+            <li> <i class="bi bi-telephone"></i> +91-86065 70657</li>
+            <li> <i class="bi bi-clock"></i> Mon - Sat / 9:00AM - 6:00PM</li>
+          </ul>
+        </div>
+      </div>
 
-    <!-- Optional JavaScript; Bootstrap 5 Bundle with Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+
+<!-- JavaScript -->
+<script>
+    // JavaScript to toggle the menu
+    const menuIcon = document.getElementById('menu-icon');
+    const navLinks = document.querySelector('.nav-links');
+
+    menuIcon.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+</script>
+
 </body>
 </html>

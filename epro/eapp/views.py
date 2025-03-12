@@ -263,6 +263,9 @@ def add_product(request):
         'types': Type.objects.all()
     })
 
+def product(request, id):
+    products= Product.objects.filter(pk=id)
+    return render(request, 'product.html',{'products': products})
 
 # View for the first page or gallery
 def first_page(request):
