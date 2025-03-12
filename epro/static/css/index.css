@@ -1,4 +1,71 @@
-/* Decrease Carousel Image Height significantly */
+/* Global Styling */
+body {
+    background-color: #121212; /* Darker black for better contrast */
+    color: #FFD700; /* Gold text color for the whole page */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: #1C1C1C; /* Darker black for navbar background */
+}
+
+.navbar .navbar-brand {
+    color: #FFD700; /* Rich gold color for navbar brand */
+    font-weight: bold;
+}
+
+.navbar a {
+    color: #FFD700; /* Gold color for navbar links */
+    text-decoration: none; /* Remove underline from navbar links */
+}
+
+.navbar a:hover {
+    color: #FFD700; /* Maintain gold color on hover */
+}
+
+.navbar button {
+    background-color: #1C1C1C; /* Dark background for buttons */
+    color: #FFD700; /* Gold text color for buttons */
+    border: 1px solid #FFD700; /* Gold border for buttons */
+}
+
+.navbar button:hover {
+    background-color: #FFD700; /* Gold background on hover */
+    color: #1C1C1C; /* Dark text color on hover */
+}
+
+/* Product Cards Styling */
+.card {
+    background-color: #1C1C1C; /* Dark background for cards */
+    border: 1px solid #FFD700; /* Gold border for cards */
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover; /* Ensures images cover the space without stretching */
+}
+
+.card-title {
+    color: #FFD700; /* Gold color for card titles */
+}
+
+.card-text {
+    color: #FFD700; /* Gold color for card description and price */
+}
+
+/* Button Styling for Product Cards */
+button {
+    background-color: #1C1C1C; /* Dark background for buttons */
+    color: #FFD700; /* Gold text color for buttons */
+    border: 1px solid #FFD700; /* Gold border for buttons */
+}
+
+button:hover {
+/* Gold background on hover */
+    color: #1C1C1C; /* Dark text color on hover */
+}
+
 .carousel-inner img {
     height: 700px; /* You can adjust this further if needed */
     object-fit: fill; /* Keeps the aspect ratio of the images intact */
