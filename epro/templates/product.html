@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - WatchCart</title>
+    <link rel="stylesheet" href="{% static 'css/product.css' %}">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="container">
+        <a class="navbar-brand" href="#">WATCHCART</a>
+        <div class="nav-links">
+            <a href="{% url 'index' %}"><button>Home</button></a>
+            <a href="{% url 'logout' %}"><button>Logout</button></a>
+        </div>
+    </div>
+</nav>
+
+<!-- Product Page -->
+<div class="product-container">
+    <div class="product-images">
+        <div class="main-image">
+            <img id="main-img" src="{{ product.image.url }}" alt="{{ product.name }}">
+        </div>
+        <div class="image-gallery">
+            <label><input type="radio" name="image-selector" checked><img src="{{ product.image.url }}"></label>
+            <label><input type="radio" name="image-selector"><img src="{{ product.image1.url }}"></label>
+            <label><input type="radio" name="image-selector"><img src="{{ product.image2.url }}"></label>
+            <label><input type="radio" name="image-selector"><img src="{{ product.image3.url }}"></label>
+            <label><input type="radio" name="image-selector"><img src="{{ product.image4.url }}"></label>
+            <label><input type="radio" name="image-selector"><img src="{{ product.image5.url }}"></label>
+        </div>
+    </div>
+
+    <div class="product-details">
+        <h1>{{ product.name }}</h1>
+        <p class="brand">Brand: <strong>{{ product.brand.name }}</strong></p>
+        <p class="price">
+            <span class="offer-price">₹{{ product.offerprice }}</span>
+            <span class="original-price">₹{{ product.price }}</span>
+            <span class="discount">({% widthratio product.offerprice product.price 100 %}% OFF)</span>
+        </p>
+        <p class="description">{{ product.description }}</p>
+
+        <p class="stock">
+            {% if product.quantity > 0 %}
+                <span class="in-stock">In Stock</span>
+            {% else %}
+                <span class="out-of-stock">Out of Stock</span>
+            {% endif %}
+        </p>
+
+        <div class="buttons">
+            <button class="buy-now">Buy Now</button>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+<!-- Customer Reviews -->
+<div class="reviews">
+    <h2>Customer Reviews</h2>
+    <p>{{ product.review }}</p>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <p>© All rights reserved by WatchCart, Kottayam, India.</p>
+</div>
+
+</body>
+</html>

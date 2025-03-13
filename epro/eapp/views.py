@@ -1,26 +1,31 @@
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth import authenticate, login, logout
 from django.core.mail import send_mail
 from django.conf import settings
 import random
 from datetime import datetime, timedelta
-from . models import *
-from django.contrib.auth.decorators import login_required
+from .models import *
 
-# Create your views here.
+# Home Page - Display All Products
 def index(request):
-    # return render(request, 'index.html')
-    product = Product.objects.all()
-    return render(request,"index.html",{"product": product}) 
+    products = Product.objects.all()
+    return render(request, "index.html", {"product": products}) 
 
+def product(request, id):
+    product = get_object_or_404(Product, pk=id)
+    return render(request, 'product.html', {'product': product})
+
+
+# User Signup
 def usersignup(request):
-    if request.POST:
+    if request.method == "POST":
         email = request.POST.get('email')
         username = request.POST.get('username')
         password = request.POST.get('password')
         confirmpassword = request.POST.get('confpassword') 
+        
         if not username or not email or not password or not confirmpassword:
             messages.error(request, 'All fields are required.')
         elif confirmpassword != password:
@@ -30,12 +35,13 @@ def usersignup(request):
         elif User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists.")
         else:
-            user = User.objects.create_user(username=username, email=email, password=password)
-            user.save()
+            User.objects.create_user(username=username, email=email, password=password)
             messages.success(request, "Account created successfully!")
             return redirect('userlogin') 
+
     return render(request, "register.html")
 
+# User Login
 def userlogin(request):
     if 'username' in request.session:
         return redirect('index')  
@@ -47,17 +53,25 @@ def userlogin(request):
             login(request, user)
             request.session['username'] = username
             if user.is_superuser:
-                 return redirect('firstpage')
+                return redirect('firstpage')
             return redirect('index')           
         else:
             messages.error(request, "Invalid credentials.")
     return render(request, 'userlogin.html')
 
+# Logout User
+def logoutuser(request):
+    logout(request)
+    request.session.flush()
+    return redirect('userlogin')
+
+# Password Reset via OTP
 def verifyotp(request):
-    if request.POST:
+    if request.method == "POST":
         otp = request.POST.get('otp')
         otp1 = request.session.get('otp')
-        otp_time_str = request.session.get('otp_time') 
+        otp_time_str = request.session.get('otp_time')
+
         if otp_time_str:
             otp_time = datetime.fromisoformat(otp_time_str)  
             otp_expiry_time = otp_time + timedelta(minutes=5)  
@@ -66,27 +80,28 @@ def verifyotp(request):
                 del request.session['otp']
                 del request.session['otp_time']
                 return redirect('verifyotp') 
+
         if otp == otp1:
             del request.session['otp']
             del request.session['otp_time']
             return redirect('passwordreset')
         else:
             messages.error(request, 'Invalid OTP. Please try again.')
+
     otp = ''.join(random.choices('123456789', k=6))
     request.session['otp'] = otp
     request.session['otp_time'] = datetime.now().isoformat()
+
     message = f'Your email verification code is: {otp}'
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [request.session.get('email')]
     send_mail('Email Verification', message, email_from, recipient_list)
+
     return render(request, "otp.html")
 
-
-
-
-
+# Get Username for Password Reset
 def getusername(request):
-    if request.POST:
+    if request.method == "POST":
         username = request.POST.get('username')
         try:
             user = User.objects.get(username=username)
@@ -97,27 +112,24 @@ def getusername(request):
             return redirect('getusername')
 
     return render(request, 'getusername.html')
+
+# Reset Password
 def passwordreset(request):
     if request.method == 'POST':
         password = request.POST.get('password')
         confirmpassword = request.POST.get('confpassword')
 
-        
         if confirmpassword != password:
             messages.error(request, "Passwords do not match.")
         else:
             email = request.session.get('email')
             try:
                 user = User.objects.get(email=email)
-
-                
                 user.set_password(password)
                 user.save()
-
-               
                 del request.session['email']
                 messages.success(request, "Your password has been reset successfully.")
-                
+
                 user = authenticate(username=user.username, password=password)
                 if user is not None:
                     login(request, user)
@@ -129,37 +141,29 @@ def passwordreset(request):
 
     return render(request, "passwordreset.html")
 
-
+# Add Product Page
 def add(request):
-    return render(request,'add.html')
+    return render(request, 'add.html')
 
+# View Category Page
 def category(request):
-    return render(request,'category.html')
+    return render(request, 'category.html')
 
+# View Bookings Page
 def bookings(request):
-    return render(request,'bookings.html')
+    return render(request, 'bookings.html')
 
-
-
-
-def logoutuser(request):
-    logout(request)
-    request.session.flush()
-    return redirect(userlogin)
-
-
-def delete_g(request,id):
-    feeds=Product.objects.filter(pk=id)
-    feeds.delete()
+# Delete Product
+def delete_g(request, id):
+    product = get_object_or_404(Product, pk=id)
+    product.delete()
     return redirect('firstpage')
 
-
+# Edit Product
 def edit_g(request, id):
-    # Fetch the product instance by ID
     product = get_object_or_404(Product, pk=id)
-    
+
     if request.method == 'POST':
-        # Fetch form data
         name = request.POST.get('todo')
         colour = request.POST.get('colour')
         price = request.POST.get('price')
@@ -171,39 +175,27 @@ def edit_g(request, id):
         type_id = request.POST.get('type')
         quantity = request.POST.get('quantity')
         image = request.FILES.get('image')
-        
-        # Check if all necessary fields are filled out
+
         if name and colour and price and offerprice and review and description and gender_id and brand_id and type_id and quantity:
-            # Update the product instance
             product.name = name
             product.colour = colour
             product.price = price
             product.offerprice = offerprice
             product.review = review
             product.description = description
-            product.gender_id = gender_id
-            product.brand_id = brand_id
-            product.type_id = type_id
+            product.gender_id = Gender.objects.get(id=gender_id)
+            product.brand_id = Brand.objects.get(id=brand_id)
+            product.type_id = Type.objects.get(id=type_id)
             product.quantity = quantity
-            
-            # Update the image if it's provided
-            if image:
-                product.image = image
-                
-            # Save the changes to the product
-            product.save()
 
-            return redirect('firstpage')  # Redirect to the 'firstpage' after success
-        else:
-            return render(request, 'add.html', {
-                'error': "All fields must be filled out.",
-                'data1': product,
-                'genders': Gender.objects.all(),
-                'brands': Brand.objects.all(),
-                'types': Type.objects.all()
-            })
+            if image:
+                product.image = image  
+            
+            product.save()
+            return redirect('firstpage')  
+
+        messages.error(request, "All fields must be filled out.")
     
-    # If GET request, display the product details in the form
     return render(request, 'add.html', {
         'data1': product,
         'genders': Gender.objects.all(),
@@ -211,11 +203,9 @@ def edit_g(request, id):
         'types': Type.objects.all()
     })
 
-
-# View to add a new product
+# Add a New Product
 def add_product(request):
     if request.method == 'POST':
-        # Fetch form data
         name = request.POST.get('todo')
         colour = request.POST.get('colour')
         price = request.POST.get('price')
@@ -227,35 +217,17 @@ def add_product(request):
         type_id = request.POST.get('type')
         quantity = request.POST.get('quantity')
         image = request.FILES.get('image')
-        
-        # Check if all necessary fields are filled out
-        if name and colour and price and offerprice and review and description and gender_id and brand_id and type_id and quantity:
-            # Create a new product instance
-            new_product = Product(
-                name=name,
-                colour=colour,
-                price=price,
-                offerprice=offerprice,
-                review=review,
-                description=description,
-                gender_id=gender_id,
-                brand_id=brand_id,
-                type_id=type_id,
-                quantity=quantity,
-                image=image
-            )
-            
-            # Save the product
-            new_product.save()
 
-            return redirect('firstpage')  # Redirect to the 'firstpage' after success
-        else:
-            return render(request, 'add.html', {
-                'error': "All fields must be filled out.",
-                'genders': Gender.objects.all(),
-                'brands': Brand.objects.all(),
-                'types': Type.objects.all()
-            })
+        if name and colour and price and offerprice and review and description and gender_id and brand_id and type_id and quantity and image:
+            Product.objects.create(
+                name=name, colour=colour, price=price, offerprice=offerprice,
+                review=review, description=description, gender_id=Gender.objects.get(id=gender_id),
+                brand_id=Brand.objects.get(id=brand_id), type_id=Type.objects.get(id=type_id),
+                quantity=quantity, image=image
+            )
+            return redirect('firstpage')
+
+        messages.error(request, "All fields must be filled out.")
     
     return render(request, 'add.html', {
         'genders': Gender.objects.all(),
@@ -263,11 +235,7 @@ def add_product(request):
         'types': Type.objects.all()
     })
 
-def product(request, id):
-    products= Product.objects.filter(pk=id)
-    return render(request, 'product.html',{'products': products})
-
-# View for the first page or gallery
+# First Page (Product Listing)
 def first_page(request):
     products = Product.objects.all()
     return render(request, 'firstpage.html', {'products': products})
