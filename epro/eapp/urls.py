@@ -14,9 +14,9 @@ urlpatterns = [
     path('logout/', views.logoutuser, name="logout"),
     path('category',views.category,name="category"),
     path('bookings',views.bookings,name="bookings"),
+    path('add/', views.add_product, name='add_product'),
     path('edit/<int:id>/', views.edit_g, name='edit_g'),
     path('delete/<int:id>/', views.delete_g, name='delete_g'),
-    path('add/', views.add_product, name='add'),
     path('firstpage/', views.first_page, name='firstpage'),
     path('product/<int:id>/', views.product, name='product'),
 

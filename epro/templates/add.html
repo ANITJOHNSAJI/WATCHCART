@@ -15,7 +15,7 @@
         <a class="navbar-brand" href="#">WATCHCART</a>
         <div class="nav-links">
             <a href="{% url 'firstpage' %}"><button>Home</button></a>
-            <a href="{% url 'add' %}"><button>Add Product</button></a>
+            <a href="{% url 'add_product' %}"><button>Add Product</button></a>
             <a href="{% url 'category' %}"><button>Category</button></a>
             <a href="{% url 'bookings' %}"><button>View Bookings</button></a>
             <a href="{% url 'logout' %}"><button>Logout</button></a>
@@ -27,47 +27,48 @@
 <div class="container">
     <h2>{% if data1 %}Edit{% else %}Add{% endif %} Product</h2>
     
-    <form action="{% if data1 %}{% url 'edit_g' data1.id %}{% else %}{% url 'add' %}{% endif %}" method="post" enctype="multipart/form-data" class="product-form">
+    <form action="{% if data1 %}{% url 'edit_g' data1.id %}{% else %}{% url 'add_product' %}{% endif %}" method="post" enctype="multipart/form-data" class="product-form">
         {% csrf_token %}
-
+        
         <!-- Image Uploads -->
         <label for="image">Main Image:</label>
         <input type="file" name="image" id="image" required><br><br>
-
+    
+        <!-- Additional Image Uploads -->
         <label for="image1">Additional Image 1:</label>
         <input type="file" name="image1" id="image1"><br><br>
 
-        <label for="image2">Additional Image 2:</label>
-        <input type="file" name="image2" id="image2"><br><br>
+        <label for="image1">Additional Image 2:</label>
+        <input type="file" name="image1" id="image2"><br><br>
 
-        <label for="image3">Additional Image 3:</label>
-        <input type="file" name="image3" id="image3"><br><br>
+        <label for="image1">Additional Image 3:</label>
+        <input type="file" name="image1" id="image3"><br><br>
 
-        <label for="image4">Additional Image 4:</label>
-        <input type="file" name="image4" id="image4"><br><br>
+        <label for="image1">Additional Image 4:</label>
+        <input type="file" name="image1" id="image4"><br><br>
 
-        <label for="image5">Additional Image 5:</label>
-        <input type="file" name="image5" id="image5"><br><br>
-
+        <label for="image1">Additional Image 5:</label>
+        <input type="file" name="image1" id="image5"><br><br>
+        
         <!-- Product Details -->
         <label for="name">Product Name:</label>
         <input type="text" name="name" value="{{ data1.name|default_if_none:'' }}" required><br><br>
-
+    
         <label for="colour">Colour:</label>
         <input type="text" name="colour" value="{{ data1.colour|default_if_none:'' }}" required><br><br>
-
+    
         <label for="price">Price:</label>
         <input type="number" name="price" value="{{ data1.price|default_if_none:'' }}" step="0.01" required><br><br>
-
+    
         <label for="offerprice">Offer Price:</label>
         <input type="number" name="offerprice" value="{{ data1.offerprice|default_if_none:'' }}" step="0.01" required><br><br>
-
+    
         <label for="review">Review:</label>
         <textarea name="review">{{ data1.review|default_if_none:'' }}</textarea><br><br>
-
+    
         <label for="description">Description:</label>
         <textarea name="description">{{ data1.description|default_if_none:'' }}</textarea><br><br>
-
+    
         <!-- Dropdown Selections -->
         <label for="gender">Gender:</label>
         <select name="gender" required>
@@ -76,7 +77,7 @@
                 <option value="{{ gender.id }}" {% if data1.gender.id == gender.id %}selected{% endif %}>{{ gender.name }}</option>
             {% endfor %}
         </select><br><br>
-
+    
         <label for="brand">Brand:</label>
         <select name="brand" required>
             <option value="" disabled selected>Select Brand</option>
@@ -84,7 +85,7 @@
                 <option value="{{ brand.id }}" {% if data1.brand.id == brand.id %}selected{% endif %}>{{ brand.name }}</option>
             {% endfor %}
         </select><br><br>
-
+    
         <label for="type">Type:</label>
         <select name="type" required>
             <option value="" disabled selected>Select Type</option>
@@ -92,12 +93,13 @@
                 <option value="{{ type.id }}" {% if data1.type.id == type.id %}selected{% endif %}>{{ type.name }}</option>
             {% endfor %}
         </select><br><br>
-
+    
         <label for="quantity">Quantity:</label>
         <input type="number" name="quantity" value="{{ data1.quantity|default_if_none:'' }}" required><br><br>
-
+    
         <button type="submit" class="submit-btn">Save Product</button>
     </form>
+    
 </div>
 
 </body>

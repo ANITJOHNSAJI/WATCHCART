@@ -141,9 +141,8 @@ def passwordreset(request):
 
     return render(request, "passwordreset.html")
 
-# Add Product Page
-def add(request):
-    return render(request, 'add.html')
+
+
 
 # View Category Page
 def category(request):
@@ -164,7 +163,8 @@ def edit_g(request, id):
     product = get_object_or_404(Product, pk=id)
 
     if request.method == 'POST':
-        name = request.POST.get('todo')
+        # Fetching form data
+        name = request.POST.get('name')  # Fixing field name here
         colour = request.POST.get('colour')
         price = request.POST.get('price')
         offerprice = request.POST.get('offerprice')
@@ -174,7 +174,7 @@ def edit_g(request, id):
         brand_id = request.POST.get('brand')
         type_id = request.POST.get('type')
         quantity = request.POST.get('quantity')
-        image = request.FILES.get('image')
+        image = request.FILES.get('image')  # For the image upload
 
         if name and colour and price and offerprice and review and description and gender_id and brand_id and type_id and quantity:
             product.name = name
@@ -183,19 +183,22 @@ def edit_g(request, id):
             product.offerprice = offerprice
             product.review = review
             product.description = description
-            product.gender_id = Gender.objects.get(id=gender_id)
-            product.brand_id = Brand.objects.get(id=brand_id)
-            product.type_id = Type.objects.get(id=type_id)
+            product.gender = Gender.objects.get(id=gender_id)
+            product.brand = Brand.objects.get(id=brand_id)
+            product.type = Type.objects.get(id=type_id)
             product.quantity = quantity
 
+            # If an image is uploaded, update it
             if image:
-                product.image = image  
-            
-            product.save()
-            return redirect('firstpage')  
+                product.image = image
 
-        messages.error(request, "All fields must be filled out.")
-    
+            product.save()
+            messages.success(request, "Product updated successfully!")
+            return redirect('firstpage')
+
+        else:
+            messages.error(request, "All fields must be filled out.")
+
     return render(request, 'add.html', {
         'data1': product,
         'genders': Gender.objects.all(),
@@ -219,21 +222,18 @@ def add_product(request):
         image = request.FILES.get('image')
 
         if name and colour and price and offerprice and review and description and gender_id and brand_id and type_id and quantity and image:
-            Product.objects.create(
+            obj = Product.objects.create(
                 name=name, colour=colour, price=price, offerprice=offerprice,
                 review=review, description=description, gender_id=Gender.objects.get(id=gender_id),
                 brand_id=Brand.objects.get(id=brand_id), type_id=Type.objects.get(id=type_id),
                 quantity=quantity, image=image
             )
+            obj.save()  # Fixed this line by adding parentheses.
             return redirect('firstpage')
 
         messages.error(request, "All fields must be filled out.")
-    
-    return render(request, 'add.html', {
-        'genders': Gender.objects.all(),
-        'brands': Brand.objects.all(),
-        'types': Type.objects.all()
-    })
+
+    return render(request, 'add.html')
 
 # First Page (Product Listing)
 def first_page(request):
