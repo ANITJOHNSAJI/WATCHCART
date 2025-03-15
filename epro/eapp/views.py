@@ -8,7 +8,7 @@ import random
 from datetime import datetime, timedelta
 from .models import *
 
-# Home Page - Display All Products
+
 def index(request):
     products = Product.objects.all()
     return render(request, "index.html", {"product": products}) 
@@ -18,7 +18,6 @@ def product(request, id):
     return render(request, 'product.html', {'product': product})
 
 
-# User Signup
 def usersignup(request):
     if request.method == "POST":
         email = request.POST.get('email')
@@ -41,7 +40,6 @@ def usersignup(request):
 
     return render(request, "register.html")
 
-# User Login
 def userlogin(request):
     if 'username' in request.session:
         return redirect('index')  
@@ -59,13 +57,13 @@ def userlogin(request):
             messages.error(request, "Invalid credentials.")
     return render(request, 'userlogin.html')
 
-# Logout User
+
 def logoutuser(request):
     logout(request)
     request.session.flush()
     return redirect('userlogin')
 
-# Password Reset via OTP
+
 def verifyotp(request):
     if request.method == "POST":
         otp = request.POST.get('otp')
@@ -99,7 +97,7 @@ def verifyotp(request):
 
     return render(request, "otp.html")
 
-# Get Username for Password Reset
+
 def getusername(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -113,7 +111,7 @@ def getusername(request):
 
     return render(request, 'getusername.html')
 
-# Reset Password
+
 def passwordreset(request):
     if request.method == 'POST':
         password = request.POST.get('password')
@@ -144,21 +142,20 @@ def passwordreset(request):
 
 
 
-# View Category Page
+
 def category(request):
     return render(request, 'category.html')
 
-# View Bookings Page
+
 def bookings(request):
     return render(request, 'bookings.html')
 
-# Delete Product
+
 def delete_g(request, id):
     product = get_object_or_404(Product, pk=id)
     product.delete()
     return redirect('firstpage')
 
-# Edit Product
 def edit_g(request, id):
     product = get_object_or_404(Product, pk=id)
 
