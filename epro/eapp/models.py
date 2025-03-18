@@ -1,16 +1,18 @@
 from django.db import models
+from django.conf import settings
+
 
 class Product(models.Model):
     GENDER_CHOICES = [
-        (True, 'Female'),
-        (False, 'Male'),
-        (None, 'Unisex'),
+        ('Female', 'Female'),
+        ('Male', 'Male'),
+        ('Unisex', 'Unisex'),
     ]
     
     TYPE_CHOICES = [
-        (True, 'Analogue'),
-        (False, 'Digital'),
-        (None, 'Analogue/Digital'),
+        ('Analogue', 'Analogue'),
+        ('Digital', 'Digital'),
+        ('Analogue/Digital', 'Analogue/Digital'),
     ]
 
     name = models.CharField(max_length=255)
@@ -18,8 +20,8 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     offerprice = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
-    gender = models.BooleanField(choices=GENDER_CHOICES, null=True, blank=True)
-    type = models.BooleanField(choices=TYPE_CHOICES, null=True, blank=True)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, null=True, blank=True)
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, null=True, blank=True)
     brand = models.CharField(max_length=100)
     quantity = models.IntegerField(default=0)
     image = models.ImageField(upload_to='products/')
@@ -31,3 +33,5 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    

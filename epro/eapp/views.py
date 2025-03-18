@@ -41,20 +41,21 @@ def usersignup(request):
     return render(request, "register.html")
 
 def userlogin(request):
-    if 'username' in request.session:
+    if request.user.is_authenticated:  # Instead of checking session directly
         return redirect('index')  
-    elif request.method == 'POST':
+
+    if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            request.session['username'] = username
             if user.is_superuser:
                 return redirect('firstpage')  # Check that the 'firstpage' URL exists
             return redirect('index')
         else:
             messages.error(request, "Invalid credentials.")
+
     return render(request, 'userlogin.html')
 
 
@@ -77,7 +78,7 @@ def verifyotp(request):
                 messages.error(request, 'OTP has expired. Please request a new one.')
                 del request.session['otp']
                 del request.session['otp_time']
-                return redirect('verifyotp')
+                return redirect('verifyotp')  # Allow user to request a new OTP
 
         if otp == otp1:
             del request.session['otp']
@@ -157,6 +158,7 @@ def delete_g(request, id):
     product.delete()
     return redirect('firstpage')
 
+
 def edit_g(request, id):
     product = get_object_or_404(Product, pk=id)
 
@@ -166,8 +168,8 @@ def edit_g(request, id):
         price = request.POST.get('price')
         offerprice = request.POST.get('offerprice')
         description = request.POST.get('description')
-        gender = request.POST.get('gender')  # 'male', 'female', or 'unisex'
-        type = request.POST.get('type')  # 'digital', 'analog', or 'analogdigital'
+        gender = request.POST.get('gender')  # 'Female', 'Male', or 'Unisex'
+        type = request.POST.get('type')  # 'Digital', 'Analogue', or 'Analogue/Digital'
         brand = request.POST.get('brand')
         quantity = request.POST.get('quantity')
         image = request.FILES.get('image')
@@ -177,21 +179,13 @@ def edit_g(request, id):
         image4 = request.FILES.get('image4')
         image5 = request.FILES.get('image5')
 
-        # Convert gender to appropriate boolean value or None
-        if gender == 'male':
-            gender_value = False  # Male
-        elif gender == 'female':
-            gender_value = True  # Female
-        else:
-            gender_value = None  # Unisex
-
-        # Convert type to appropriate boolean value or None
-        if type == 'digital':
-            type_value = False  # Digital
-        elif type == 'analog':
-            type_value = True  # Analogue
-        else:
-            type_value = None  # Analogue/Digital
+        # Ensure gender and type are from the predefined choices
+        if gender not in dict(Product.GENDER_CHOICES):
+            messages.error(request, 'Invalid gender choice.')
+            return redirect('edit_g', id=id)
+        if type not in dict(Product.TYPE_CHOICES):
+            messages.error(request, 'Invalid type choice.')
+            return redirect('edit_g', id=id)
 
         # Update the product fields
         product.name = name
@@ -199,8 +193,8 @@ def edit_g(request, id):
         product.price = price
         product.offerprice = offerprice
         product.description = description
-        product.gender = gender_value
-        product.type = type_value
+        product.gender = gender
+        product.type = type
         product.brand = brand
         product.quantity = quantity
 
@@ -234,8 +228,8 @@ def add_product(request):
         price = request.POST.get('price')
         offerprice = request.POST.get('offerprice')
         description = request.POST.get('description')
-        gender = request.POST.get('gender')  # 'male', 'female', or 'unisex'
-        type = request.POST.get('type')  # 'digital', 'analog', or 'analogdigital'
+        gender = request.POST.get('gender')  # 'Female', 'Male', or 'Unisex'
+        type = request.POST.get('type')  # 'Digital', 'Analogue', or 'Analogue/Digital'
         brand = request.POST.get('brand')
         quantity = request.POST.get('quantity')
         image = request.FILES.get('image')
@@ -245,27 +239,18 @@ def add_product(request):
         image4 = request.FILES.get('image4')
         image5 = request.FILES.get('image5')
 
-        # Convert gender to appropriate boolean value or None
-        if gender == 'male':
-            gender_value = False  # Male
-        elif gender == 'female':
-            gender_value = True  # Female
-        else:
-            gender_value = None  # Unisex
-
-        # Convert type to appropriate boolean value or None
-        if type == 'digital':
-            type_value = False  # Digital
-        elif type == 'analog':
-            type_value = True  # Analogue
-        else:
-            type_value = None  # Analogue/Digital
+        # Ensure gender and type are from the predefined choices
+        if gender not in dict(Product.GENDER_CHOICES):
+            messages.error(request, 'Invalid gender choice.')
+            return redirect('add_product')
+        if type not in dict(Product.TYPE_CHOICES):
+            messages.error(request, 'Invalid type choice.')
+            return redirect('add_product')
 
         # Create the product
         Product.objects.create(
             name=name, colour=colour, price=price, offerprice=offerprice,
-            description=description, gender=gender_value,
-            type=type_value, brand=brand, quantity=quantity,
+            description=description, gender=gender, type=type, brand=brand, quantity=quantity,
             image=image, image1=image1, image2=image2, image3=image3, image4=image4, image5=image5
         )
         messages.success(request, "Product added successfully!")

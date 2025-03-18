@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }} - WatchCart</title>
     <link rel="stylesheet" href="{% static 'css/product.css' %}">
+    <script>
+        // JS to change main image when selecting another image from the gallery
+        function changeMainImage(img) {
+            document.getElementById('main-img').src = img.src;
+        }
+    </script>
 </head>
 <body>
 
@@ -28,19 +34,19 @@
         </div>
         <div class="image-gallery">
             {% if product.image1 %}
-                <label><input type="radio" name="image-selector"><img src="{{ product.image1.url }}" alt="Image 1"></label>
+                <label><input type="radio" name="image-selector" onclick="changeMainImage(this.nextElementSibling)"><img src="{{ product.image1.url }}" alt="Image 1"></label>
             {% endif %}
             {% if product.image2 %}
-                <label><input type="radio" name="image-selector"><img src="{{ product.image2.url }}" alt="Image 2"></label>
+                <label><input type="radio" name="image-selector" onclick="changeMainImage(this.nextElementSibling)"><img src="{{ product.image2.url }}" alt="Image 2"></label>
             {% endif %}
             {% if product.image3 %}
-                <label><input type="radio" name="image-selector"><img src="{{ product.image3.url }}" alt="Image 3"></label>
+                <label><input type="radio" name="image-selector" onclick="changeMainImage(this.nextElementSibling)"><img src="{{ product.image3.url }}" alt="Image 3"></label>
             {% endif %}
             {% if product.image4 %}
-                <label><input type="radio" name="image-selector"><img src="{{ product.image4.url }}" alt="Image 4"></label>
+                <label><input type="radio" name="image-selector" onclick="changeMainImage(this.nextElementSibling)"><img src="{{ product.image4.url }}" alt="Image 4"></label>
             {% endif %}
             {% if product.image5 %}
-                <label><input type="radio" name="image-selector"><img src="{{ product.image5.url }}" alt="Image 5"></label>
+                <label><input type="radio" name="image-selector" onclick="changeMainImage(this.nextElementSibling)"><img src="{{ product.image5.url }}" alt="Image 5"></label>
             {% endif %}
         </div>
     </div>
@@ -52,27 +58,28 @@
 
         <p class="gender">
             Gender: <strong>
-                {% if product.gender == False %}
+                {% if product.gender == 'Male' %}
                     Male
-                {% elif product.gender == True %}
+                {% elif product.gender == 'Female' %}
                     Female
                 {% else %}
                     Unisex
                 {% endif %}
             </strong>
         </p>
-        <!-- Type display -->
+
         <p class="type">
             Type: <strong>
-                {% if product.type == False %}
-                    Digital
-                {% elif product.type == True %}
+                {% if product.type == 'Analogue' %}
                     Analogue
+                {% elif product.type == 'Digital' %}
+                    Digital
                 {% else %}
                     Analogue/Digital
                 {% endif %}
             </strong>
         </p>
+
         <p class="price">
             <span class="offer-price">₹{{ product.offerprice }}</span>
             <span class="original-price">₹{{ product.price }}</span>
@@ -97,7 +104,14 @@
 <!-- Customer Reviews -->
 <div class="reviews">
     <h2>Customer Reviews</h2>
-    <p>{{ product.review }}</p>
+    {% for review in product.reviews.all %}
+        <div class="review">
+            <p><strong>{{ review.user.username }}</strong>: {{ review.content }}</p>
+            <p>Rating: {{ review.rating }} / 5</p>
+        </div>
+    {% empty %}
+        <p>No reviews yet.</p>
+    {% endfor %}
 </div>
 
 <!-- Footer -->

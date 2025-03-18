@@ -29,16 +29,14 @@
 <div class="container">
     <h2>{% if data1 %}Edit{% else %}Add{% endif %} Product</h2>
     
-    <!-- Add Product Form -->
     {% if not data1 %}
+    <!-- Add Product Form -->
     <form action="{% url 'add_product' %}" method="post" enctype="multipart/form-data" class="product-form">
         {% csrf_token %}
         
-        <!-- Image Uploads -->
         <label for="image">Main Image:</label>
         <input type="file" name="image" id="image" required><br><br>
     
-        <!-- Additional Image Uploads -->
         <label for="image1">Additional Image 1:</label>
         <input type="file" name="image1" id="image1"><br><br>
 
@@ -54,7 +52,6 @@
         <label for="image5">Additional Image 5:</label>
         <input type="file" name="image5" id="image5"><br><br>
       
-        
         <label for="name">Product Name:</label>
         <input type="text" name="name" required><br><br>
     
@@ -69,41 +66,36 @@
     
         <label for="description">Description:</label>
         <textarea name="description"></textarea><br><br>
-    
-     
-           <!-- Gender selection -->
-    <label for="gender">Gender</label>
-    <select name="gender" id="gender">
-        <option value="True">Female</option>
-        <option value="False">Male</option>
-        <option value="None">Unisex</option>
-    </select>
+        <label for="gender">Gender</label>
+        <select name="gender" id="gender">
+            <option value="Female" {% if data1.gender == 'Female' %} selected {% endif %}>Female</option>
+            <option value="Male" {% if data1.gender == 'Male' %} selected {% endif %}>Male</option>
+            <option value="Unisex" {% if data1.gender == 'Unisex' %} selected {% endif %}>Unisex</option>
+        </select>
         <label for="brand">Brand:</label>
         <input type="text" name="brand" required><br><br>
     
-        <label for="type">WATCHType</label>
+        <label for="type">Type</label>
         <select name="type" id="type">
-            <option value="True">Analogue</option>
-            <option value="False">Digital</option>
-            <option value="None">Analogue/Digital</option>
-        </select>
+            <option value="Analogue" {% if data1.type == 'Analogue' %} selected {% endif %}>Analogue</option>
+            <option value="Digital" {% if data1.type == 'Digital' %} selected {% endif %}>Digital</option>
+            <option value="Analogue/Digital" {% if data1.type == 'Analogue/Digital' %} selected {% endif %}>Analogue/Digital</option>
+        
         <label for="quantity">Quantity:</label>
         <input type="number" name="quantity" required><br><br>
     
         <button type="submit" class="submit-btn">Save Product</button>
     </form>
     {% endif %}
-
     
     {% if data1 %}
+    <!-- Edit Product Form -->
     <form action="{% url 'edit_g' data1.id %}" method="post" enctype="multipart/form-data" class="product-form">
         {% csrf_token %}
         
-      
         <label for="image">Main Image:</label>
         <input type="file" name="image" id="image"><br><br>
     
-       
         <label for="image1">Additional Image 1:</label>
         <input type="file" name="image1" id="image1"><br><br>
 
@@ -119,7 +111,6 @@
         <label for="image5">Additional Image 5:</label>
         <input type="file" name="image5" id="image5"><br><br>
       
-        
         <label for="name">Product Name:</label>
         <input type="text" name="name" value="{{ data1.name }}" required><br><br>
     
@@ -137,9 +128,9 @@
     
         <label for="gender">Gender</label>
         <select name="gender" id="gender">
-            <option value="female" {% if product.gender == True %} selected {% endif %}>Female</option>
-            <option value="male" {% if product.gender == False %} selected {% endif %}>Male</option>
-            <option value="unisex" {% if product.gender is none %} selected {% endif %}>Unisex</option>
+            <option value="Female" {% if data1.gender == 'Female' %} selected {% endif %}>Female</option>
+            <option value="Male" {% if data1.gender == 'Male' %} selected {% endif %}>Male</option>
+            <option value="Unisex" {% if data1.gender == 'Unisex' %} selected {% endif %}>Unisex</option>
         </select>
 
         <label for="brand">Brand:</label>
@@ -147,9 +138,9 @@
     
         <label for="type">Type</label>
         <select name="type" id="type">
-            <option value="analog" {% if product.type == True %} selected {% endif %}>Analogue</option>
-            <option value="digital" {% if product.type == False %} selected {% endif %}>Digital</option>
-            <option value="analogdigital" {% if product.type is none %} selected {% endif %}>Analogue/Digital</option>
+            <option value="Analogue" {% if data1.type == 'Analogue' %} selected {% endif %}>Analogue</option>
+            <option value="Digital" {% if data1.type == 'Digital' %} selected {% endif %}>Digital</option>
+            <option value="Analogue/Digital" {% if data1.type == 'Analogue/Digital' %} selected {% endif %}>Analogue/Digital</option>
         </select>
     
         <label for="quantity">Quantity:</label>
