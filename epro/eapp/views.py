@@ -11,7 +11,7 @@ from .models import *
 
 def index(request):
     products = Product.objects.all()
-    return render(request, "index.html", {"product": products}) 
+    return render(request, "index.html", {"products": products})  # Corrected variable name
 
 def product(request, id):
     product = get_object_or_404(Product, pk=id)
@@ -51,8 +51,8 @@ def userlogin(request):
             login(request, user)
             request.session['username'] = username
             if user.is_superuser:
-                return redirect('firstpage')
-            return redirect('index')           
+                return redirect('firstpage')  # Check that the 'firstpage' URL exists
+            return redirect('index')
         else:
             messages.error(request, "Invalid credentials.")
     return render(request, 'userlogin.html')
@@ -71,13 +71,13 @@ def verifyotp(request):
         otp_time_str = request.session.get('otp_time')
 
         if otp_time_str:
-            otp_time = datetime.fromisoformat(otp_time_str)  
-            otp_expiry_time = otp_time + timedelta(minutes=5)  
+            otp_time = datetime.fromisoformat(otp_time_str)
+            otp_expiry_time = otp_time + timedelta(minutes=5)
             if datetime.now() > otp_expiry_time:
                 messages.error(request, 'OTP has expired. Please request a new one.')
                 del request.session['otp']
                 del request.session['otp_time']
-                return redirect('verifyotp') 
+                return redirect('verifyotp')
 
         if otp == otp1:
             del request.session['otp']
@@ -96,6 +96,7 @@ def verifyotp(request):
     send_mail('Email Verification', message, email_from, recipient_list)
 
     return render(request, "otp.html")
+
 
 
 def getusername(request):
@@ -160,79 +161,121 @@ def edit_g(request, id):
     product = get_object_or_404(Product, pk=id)
 
     if request.method == 'POST':
-        # Fetching form data
-        name = request.POST.get('name')  # Fixing field name here
+        name = request.POST.get('name')
         colour = request.POST.get('colour')
         price = request.POST.get('price')
         offerprice = request.POST.get('offerprice')
-        review = request.POST.get('review')
         description = request.POST.get('description')
-        gender_id = request.POST.get('gender')
-        brand_id = request.POST.get('brand')
-        type_id = request.POST.get('type')
+        gender = request.POST.get('gender')  # 'male', 'female', or 'unisex'
+        type = request.POST.get('type')  # 'digital', 'analog', or 'analogdigital'
+        brand = request.POST.get('brand')
         quantity = request.POST.get('quantity')
-        image = request.FILES.get('image')  # For the image upload
+        image = request.FILES.get('image')
+        image1 = request.FILES.get('image1')
+        image2 = request.FILES.get('image2')
+        image3 = request.FILES.get('image3')
+        image4 = request.FILES.get('image4')
+        image5 = request.FILES.get('image5')
 
-        if name and colour and price and offerprice and review and description and gender_id and brand_id and type_id and quantity:
-            product.name = name
-            product.colour = colour
-            product.price = price
-            product.offerprice = offerprice
-            product.review = review
-            product.description = description
-            product.gender = Gender.objects.get(id=gender_id)
-            product.brand = Brand.objects.get(id=brand_id)
-            product.type = Type.objects.get(id=type_id)
-            product.quantity = quantity
-
-            # If an image is uploaded, update it
-            if image:
-                product.image = image
-
-            product.save()
-            messages.success(request, "Product updated successfully!")
-            return redirect('firstpage')
-
+        # Convert gender to appropriate boolean value or None
+        if gender == 'male':
+            gender_value = False  # Male
+        elif gender == 'female':
+            gender_value = True  # Female
         else:
-            messages.error(request, "All fields must be filled out.")
+            gender_value = None  # Unisex
+
+        # Convert type to appropriate boolean value or None
+        if type == 'digital':
+            type_value = False  # Digital
+        elif type == 'analog':
+            type_value = True  # Analogue
+        else:
+            type_value = None  # Analogue/Digital
+
+        # Update the product fields
+        product.name = name
+        product.colour = colour
+        product.price = price
+        product.offerprice = offerprice
+        product.description = description
+        product.gender = gender_value
+        product.type = type_value
+        product.brand = brand
+        product.quantity = quantity
+
+        # If images are uploaded, update them
+        if image:
+            product.image = image
+        if image1:
+            product.image1 = image1
+        if image2:
+            product.image2 = image2
+        if image3:
+            product.image3 = image3
+        if image4:
+            product.image4 = image4
+        if image5:
+            product.image5 = image5
+
+        product.save()  # Save the updated product
+        messages.success(request, "Product updated successfully!")
+        return redirect('firstpage')
 
     return render(request, 'add.html', {
         'data1': product,
-        'genders': Gender.objects.all(),
-        'brands': Brand.objects.all(),
-        'types': Type.objects.all()
     })
 
 # Add a New Product
 def add_product(request):
     if request.method == 'POST':
-        name = request.POST.get('todo')
+        name = request.POST.get('name')
         colour = request.POST.get('colour')
         price = request.POST.get('price')
         offerprice = request.POST.get('offerprice')
-        review = request.POST.get('review')
         description = request.POST.get('description')
-        gender_id = request.POST.get('gender')
-        brand_id = request.POST.get('brand')
-        type_id = request.POST.get('type')
+        gender = request.POST.get('gender')  # 'male', 'female', or 'unisex'
+        type = request.POST.get('type')  # 'digital', 'analog', or 'analogdigital'
+        brand = request.POST.get('brand')
         quantity = request.POST.get('quantity')
         image = request.FILES.get('image')
+        image1 = request.FILES.get('image1')
+        image2 = request.FILES.get('image2')
+        image3 = request.FILES.get('image3')
+        image4 = request.FILES.get('image4')
+        image5 = request.FILES.get('image5')
 
-        if name and colour and price and offerprice and review and description and gender_id and brand_id and type_id and quantity and image:
-            obj = Product.objects.create(
-                name=name, colour=colour, price=price, offerprice=offerprice,
-                review=review, description=description, gender_id=Gender.objects.get(id=gender_id),
-                brand_id=Brand.objects.get(id=brand_id), type_id=Type.objects.get(id=type_id),
-                quantity=quantity, image=image
-            )
-            obj.save()  # Fixed this line by adding parentheses.
-            return redirect('firstpage')
+        # Convert gender to appropriate boolean value or None
+        if gender == 'male':
+            gender_value = False  # Male
+        elif gender == 'female':
+            gender_value = True  # Female
+        else:
+            gender_value = None  # Unisex
 
-        messages.error(request, "All fields must be filled out.")
+        # Convert type to appropriate boolean value or None
+        if type == 'digital':
+            type_value = False  # Digital
+        elif type == 'analog':
+            type_value = True  # Analogue
+        else:
+            type_value = None  # Analogue/Digital
+
+        # Create the product
+        Product.objects.create(
+            name=name, colour=colour, price=price, offerprice=offerprice,
+            description=description, gender=gender_value,
+            type=type_value, brand=brand, quantity=quantity,
+            image=image, image1=image1, image2=image2, image3=image3, image4=image4, image5=image5
+        )
+        messages.success(request, "Product added successfully!")
+        return redirect('firstpage')  # Redirect to the product listing page
 
     return render(request, 'add.html')
+
 
 # First Page (Product Listing)
 def first_page(request):
     products = Product.objects.all()
     return render(request, 'firstpage.html', {'products': products})
+

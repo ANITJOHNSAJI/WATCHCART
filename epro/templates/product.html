@@ -27,22 +27,55 @@
             <img id="main-img" src="{{ product.image.url }}" alt="{{ product.name }}">
         </div>
         <div class="image-gallery">
-            <label><input type="radio" name="image-selector" checked><img src="{{ product.image.url }}"></label>
-            <label><input type="radio" name="image-selector"><img src="{{ product.image1.url }}"></label>
-            <label><input type="radio" name="image-selector"><img src="{{ product.image2.url }}"></label>
-            <label><input type="radio" name="image-selector"><img src="{{ product.image3.url }}"></label>
-            <label><input type="radio" name="image-selector"><img src="{{ product.image4.url }}"></label>
-            <label><input type="radio" name="image-selector"><img src="{{ product.image5.url }}"></label>
+            {% if product.image1 %}
+                <label><input type="radio" name="image-selector"><img src="{{ product.image1.url }}" alt="Image 1"></label>
+            {% endif %}
+            {% if product.image2 %}
+                <label><input type="radio" name="image-selector"><img src="{{ product.image2.url }}" alt="Image 2"></label>
+            {% endif %}
+            {% if product.image3 %}
+                <label><input type="radio" name="image-selector"><img src="{{ product.image3.url }}" alt="Image 3"></label>
+            {% endif %}
+            {% if product.image4 %}
+                <label><input type="radio" name="image-selector"><img src="{{ product.image4.url }}" alt="Image 4"></label>
+            {% endif %}
+            {% if product.image5 %}
+                <label><input type="radio" name="image-selector"><img src="{{ product.image5.url }}" alt="Image 5"></label>
+            {% endif %}
         </div>
     </div>
 
     <div class="product-details">
         <h1>{{ product.name }}</h1>
         <p class="brand">Brand: <strong>{{ product.brand.name }}</strong></p>
+        <p class="colour">Colour: <strong>{{ product.colour }}</strong></p>
+
+        <p class="gender">
+            Gender: <strong>
+                {% if product.gender == False %}
+                    Male
+                {% elif product.gender == True %}
+                    Female
+                {% else %}
+                    Unisex
+                {% endif %}
+            </strong>
+        </p>
+        <!-- Type display -->
+        <p class="type">
+            Type: <strong>
+                {% if product.type == False %}
+                    Digital
+                {% elif product.type == True %}
+                    Analogue
+                {% else %}
+                    Analogue/Digital
+                {% endif %}
+            </strong>
+        </p>
         <p class="price">
             <span class="offer-price">₹{{ product.offerprice }}</span>
             <span class="original-price">₹{{ product.price }}</span>
-         
         </p>
         <p class="description">{{ product.description }}</p>
 

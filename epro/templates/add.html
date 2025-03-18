@@ -1,10 +1,12 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if data1 %}Edit{% else %}Add{% endif %} Product - WatchCart</title>
+
+    <!-- Load static files -->
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/add.css' %}">
 </head>
 <body>
@@ -27,7 +29,9 @@
 <div class="container">
     <h2>{% if data1 %}Edit{% else %}Add{% endif %} Product</h2>
     
-    <form action="{% if data1 %}{% url 'edit_g' data1.id %}{% else %}{% url 'add_product' %}{% endif %}" method="post" enctype="multipart/form-data" class="product-form">
+    <!-- Add Product Form -->
+    {% if not data1 %}
+    <form action="{% url 'add_product' %}" method="post" enctype="multipart/form-data" class="product-form">
         {% csrf_token %}
         
         <!-- Image Uploads -->
@@ -38,68 +42,122 @@
         <label for="image1">Additional Image 1:</label>
         <input type="file" name="image1" id="image1"><br><br>
 
-        <label for="image1">Additional Image 2:</label>
-        <input type="file" name="image1" id="image2"><br><br>
+        <label for="image2">Additional Image 2:</label>
+        <input type="file" name="image2" id="image2"><br><br>
 
-        <label for="image1">Additional Image 3:</label>
-        <input type="file" name="image1" id="image3"><br><br>
+        <label for="image3">Additional Image 3:</label>
+        <input type="file" name="image3" id="image3"><br><br>
 
-        <label for="image1">Additional Image 4:</label>
-        <input type="file" name="image1" id="image4"><br><br>
+        <label for="image4">Additional Image 4:</label>
+        <input type="file" name="image4" id="image4"><br><br>
 
-        <label for="image1">Additional Image 5:</label>
-        <input type="file" name="image1" id="image5"><br><br>
+        <label for="image5">Additional Image 5:</label>
+        <input type="file" name="image5" id="image5"><br><br>
+      
         
-        <!-- Product Details -->
         <label for="name">Product Name:</label>
-        <input type="text" name="name" value="{{ data1.name|default_if_none:'' }}" required><br><br>
+        <input type="text" name="name" required><br><br>
     
         <label for="colour">Colour:</label>
-        <input type="text" name="colour" value="{{ data1.colour|default_if_none:'' }}" required><br><br>
+        <input type="text" name="colour" required><br><br>
     
         <label for="price">Price:</label>
-        <input type="number" name="price" value="{{ data1.price|default_if_none:'' }}" step="0.01" required><br><br>
+        <input type="number" name="price" step="0.01" required><br><br>
     
         <label for="offerprice">Offer Price:</label>
-        <input type="number" name="offerprice" value="{{ data1.offerprice|default_if_none:'' }}" step="0.01" required><br><br>
-    
-        <label for="review">Review:</label>
-        <textarea name="review">{{ data1.review|default_if_none:'' }}</textarea><br><br>
+        <input type="number" name="offerprice" step="0.01" required><br><br>
     
         <label for="description">Description:</label>
-        <textarea name="description">{{ data1.description|default_if_none:'' }}</textarea><br><br>
+        <textarea name="description"></textarea><br><br>
     
-        <!-- Dropdown Selections -->
-        <label for="gender">Gender:</label>
-        <select name="gender" required>
-            <option value="" disabled selected>Select Gender</option>
-            {% for gender in genders %}
-                <option value="{{ gender.id }}" {% if data1.gender.id == gender.id %}selected{% endif %}>{{ gender.name }}</option>
-            {% endfor %}
-        </select><br><br>
-    
+     
+           <!-- Gender selection -->
+    <label for="gender">Gender</label>
+    <select name="gender" id="gender">
+        <option value="True">Female</option>
+        <option value="False">Male</option>
+        <option value="None">Unisex</option>
+    </select>
         <label for="brand">Brand:</label>
-        <select name="brand" required>
-            <option value="" disabled selected>Select Brand</option>
-            {% for brand in brands %}
-                <option value="{{ brand.id }}" {% if data1.brand.id == brand.id %}selected{% endif %}>{{ brand.name }}</option>
-            {% endfor %}
-        </select><br><br>
+        <input type="text" name="brand" required><br><br>
     
-        <label for="type">Type:</label>
-        <select name="type" required>
-            <option value="" disabled selected>Select Type</option>
-            {% for type in types %}
-                <option value="{{ type.id }}" {% if data1.type.id == type.id %}selected{% endif %}>{{ type.name }}</option>
-            {% endfor %}
-        </select><br><br>
-    
+        <label for="type">WATCHType</label>
+        <select name="type" id="type">
+            <option value="True">Analogue</option>
+            <option value="False">Digital</option>
+            <option value="None">Analogue/Digital</option>
+        </select>
         <label for="quantity">Quantity:</label>
-        <input type="number" name="quantity" value="{{ data1.quantity|default_if_none:'' }}" required><br><br>
+        <input type="number" name="quantity" required><br><br>
     
         <button type="submit" class="submit-btn">Save Product</button>
     </form>
+    {% endif %}
+
     
+    {% if data1 %}
+    <form action="{% url 'edit_g' data1.id %}" method="post" enctype="multipart/form-data" class="product-form">
+        {% csrf_token %}
+        
+      
+        <label for="image">Main Image:</label>
+        <input type="file" name="image" id="image"><br><br>
+    
+       
+        <label for="image1">Additional Image 1:</label>
+        <input type="file" name="image1" id="image1"><br><br>
+
+        <label for="image2">Additional Image 2:</label>
+        <input type="file" name="image2" id="image2"><br><br>
+
+        <label for="image3">Additional Image 3:</label>
+        <input type="file" name="image3" id="image3"><br><br>
+
+        <label for="image4">Additional Image 4:</label>
+        <input type="file" name="image4" id="image4"><br><br>
+
+        <label for="image5">Additional Image 5:</label>
+        <input type="file" name="image5" id="image5"><br><br>
+      
+        
+        <label for="name">Product Name:</label>
+        <input type="text" name="name" value="{{ data1.name }}" required><br><br>
+    
+        <label for="colour">Colour:</label>
+        <input type="text" name="colour" value="{{ data1.colour }}" required><br><br>
+    
+        <label for="price">Price:</label>
+        <input type="number" name="price" value="{{ data1.price }}" step="0.01" required><br><br>
+    
+        <label for="offerprice">Offer Price:</label>
+        <input type="number" name="offerprice" value="{{ data1.offerprice }}" step="0.01" required><br><br>
+    
+        <label for="description">Description:</label>
+        <textarea name="description">{{ data1.description }}</textarea><br><br>
+    
+        <label for="gender">Gender</label>
+        <select name="gender" id="gender">
+            <option value="female" {% if product.gender == True %} selected {% endif %}>Female</option>
+            <option value="male" {% if product.gender == False %} selected {% endif %}>Male</option>
+            <option value="unisex" {% if product.gender is none %} selected {% endif %}>Unisex</option>
+        </select>
+
+        <label for="brand">Brand:</label>
+        <input type="text" name="brand" value="{{ data1.brand }}" required><br><br>
+    
+        <label for="type">Type</label>
+        <select name="type" id="type">
+            <option value="analog" {% if product.type == True %} selected {% endif %}>Analogue</option>
+            <option value="digital" {% if product.type == False %} selected {% endif %}>Digital</option>
+            <option value="analogdigital" {% if product.type is none %} selected {% endif %}>Analogue/Digital</option>
+        </select>
+    
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" value="{{ data1.quantity }}" required><br><br>
+    
+        <button type="submit" class="submit-btn">Save Changes</button>
+    </form>
+    {% endif %}
 </div>
 
 </body>

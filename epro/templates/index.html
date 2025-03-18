@@ -26,19 +26,19 @@
 </nav>
 
 <!-- Products -->
-<div >
-    <img class="bodyimage"src="{%static 'images/header_bg-1050x700.jpg' %}" alt="">
+<div>
+    <img class="bodyimage" src="{% static 'images/header_bg-1050x700.jpg' %}" alt="WatchCart Background">
 </div>
 <div class="products-container">
-    {% for i in product %}
+    {% for product in products %}
     <div class="card">
-        <a href="{% url 'product' i.id %}">
-            <img src="{{ i.image.url }}" alt="{{ i.name }}">
+        <a href="{% url 'product' product.id %}">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
         </a>
         <div class="card-body">
-            <h5>{{ i.name }}</h5>
-            <p>{{ i.description }}</p>
-            <p><del>${{i.price}}</del>  <strong>${{ i.offerprice }}</strong></p>
+            <h5>{{ product.name }}</h5>
+            <p>{{ product.description }}</p>
+            <p><del>${{ product.price }}</del>  <strong>${{ product.offerprice }}</strong></p>
         </div>
     </div>
     {% endfor %}
@@ -48,7 +48,6 @@
 <div class="foot">
     <div class="foot1">
         <ul>
-      
             <li>© All rights reserved by WatchCart, Kottayam, India.</li>
         </ul>
     </div>
