@@ -6,12 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ product.name }} - WatchCart</title>
     <link rel="stylesheet" href="{% static 'css/product.css' %}">
-    <script>
-        // JS to change main image when selecting another image from the gallery
-        function changeMainImage(img) {
-            document.getElementById('main-img').src = img.src;
-        }
-    </script>
 </head>
 <body>
 
@@ -21,6 +15,7 @@
         <a class="navbar-brand" href="#">WATCHCART</a>
         <div class="nav-links">
             <a href="{% url 'index' %}"><button>Home</button></a>
+            <a href="{% url 'cart_view' %}"><button>Cart</button></a>
             <a href="{% url 'logout' %}"><button>Logout</button></a>
         </div>
     </div>
@@ -34,26 +29,26 @@
         </div>
         <div class="image-gallery">
             {% if product.image1 %}
-                <label><input type="radio" name="image-selector" onclick="changeMainImage(this.nextElementSibling)"><img src="{{ product.image1.url }}" alt="Image 1"></label>
+                <label><input type="radio" name="image-selector" checked><img src="{{ product.image1.url }}" alt="Image 1"></label>
             {% endif %}
             {% if product.image2 %}
-                <label><input type="radio" name="image-selector" onclick="changeMainImage(this.nextElementSibling)"><img src="{{ product.image2.url }}" alt="Image 2"></label>
+                <label><input type="radio" name="image-selector"><img src="{{ product.image2.url }}" alt="Image 2"></label>
             {% endif %}
             {% if product.image3 %}
-                <label><input type="radio" name="image-selector" onclick="changeMainImage(this.nextElementSibling)"><img src="{{ product.image3.url }}" alt="Image 3"></label>
+                <label><input type="radio" name="image-selector"><img src="{{ product.image3.url }}" alt="Image 3"></label>
             {% endif %}
             {% if product.image4 %}
-                <label><input type="radio" name="image-selector" onclick="changeMainImage(this.nextElementSibling)"><img src="{{ product.image4.url }}" alt="Image 4"></label>
+                <label><input type="radio" name="image-selector"><img src="{{ product.image4.url }}" alt="Image 4"></label>
             {% endif %}
             {% if product.image5 %}
-                <label><input type="radio" name="image-selector" onclick="changeMainImage(this.nextElementSibling)"><img src="{{ product.image5.url }}" alt="Image 5"></label>
+                <label><input type="radio" name="image-selector"><img src="{{ product.image5.url }}" alt="Image 5"></label>
             {% endif %}
         </div>
     </div>
 
     <div class="product-details">
         <h1>{{ product.name }}</h1>
-        <p class="brand">Brand: <strong>{{ product.brand.name }}</strong></p>
+        <p class="brand">Brand: <strong>{{ product.brand }}</strong></p>  
         <p class="colour">Colour: <strong>{{ product.colour }}</strong></p>
 
         <p class="gender">
@@ -95,8 +90,21 @@
         </p>
 
         <div class="buttons">
-            <button class="buy-now">Buy Now</button>
-            <button class="add-to-cart">Add to Cart</button>
+            <!-- Buy Now Button -->
+            <a href="{% url 'checkout' %}"><button class="buy-now">Buy Now</button></a>
+
+            <!-- Conditional Add to Cart / Go to Cart Button -->
+            {% if product.id in cart_item_ids %}
+                <!-- If the product is already in the cart, show 'Go to Cart' -->
+                <a href="{% url 'cart_view' %}"><button class="add-to-cart">Go to Cart</button></a>
+            {% else %}
+                <!-- If the product is not in the cart, show 'Add to Cart' -->
+                {% if product.quantity > 0 %}
+                    <a href="{% url 'add_to_cart' product.id %}"><button class="add-to-cart">Add to Cart</button></a>
+                {% else %}
+                    <button class="add-to-cart" disabled>Out of Stock</button>
+                {% endif %}
+            {% endif %}
         </div>
     </div>
 </div>
@@ -105,18 +113,11 @@
 <div class="reviews">
     <h2>Customer Reviews</h2>
     {% for review in product.reviews.all %}
-        <div class="review">
-            <p><strong>{{ review.user.username }}</strong>: {{ review.content }}</p>
-            <p>Rating: {{ review.rating }} / 5</p>
-        </div>
-    {% empty %}
-        <p>No reviews yet.</p>
+    <div class="review">
+        <p><strong>{{ review.user.username }}</strong>: {{ review.content }}</p>
+        <p>Rating: {{ review.rating }} / 5</p>
+    </div>
     {% endfor %}
-</div>
-
-<!-- Footer -->
-<div class="footer">
-    <p>© All rights reserved by WatchCart, Kottayam, India.</p>
 </div>
 
 </body>

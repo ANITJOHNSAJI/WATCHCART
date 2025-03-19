@@ -44,6 +44,7 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap; /* Added for responsive layout */
 }
 
 /* Product Images */
@@ -63,6 +64,7 @@ body {
     gap: 10px;
     justify-content: center;
     margin-top: 10px;
+    flex-wrap: wrap; /* Ensure images wrap properly on small screens */
 }
 
 .image-gallery label {
@@ -205,14 +207,23 @@ body {
         flex-direction: column;
         align-items: center;
         text-align: center;
+        padding: 15px;
     }
 
     .main-image img {
-        width: 300px;
+        width: 100%;
+        max-width: 300px; /* Ensures the image doesn't stretch too much */
     }
 
     .image-gallery {
         flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .image-gallery img {
+        width: 50px;
+        height: 50px;
+        margin: 5px;
     }
 
     .product-details {
@@ -224,5 +235,10 @@ body {
         flex-direction: column;
         gap: 10px;
         align-items: center;
+    }
+
+    .buy-now, .add-to-cart {
+        width: 100%;
+        max-width: 250px; /* Ensures buttons are not too wide */
     }
 }
