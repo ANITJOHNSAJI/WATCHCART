@@ -14,21 +14,27 @@
 <!-- Navbar -->
 <nav class="navbar">
     <a class="navbar-brand" href="#">WATCHCART</a>
+    
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle">☰</button>
+
     <div class="nav-links">
         <a href="{% url 'index' %}"><button>Home</button></a>
         <a href="{% url 'cart_view' %}"><button>Cart</button></a>
+
         {% if user.is_authenticated %}
-        <div><a href="{% url 'logout' %}"><button>Logout</button></a></div>
+            <a href="{% url 'logout' %}"><button>Logout</button></a>
         {% else %}
-        <div><a href="{% url 'userlogin' %}"><button>Login</button></a></div>
+            <a href="{% url 'userlogin' %}"><button>Login</button></a>
         {% endif %}
     </div>
 </nav>
 
-<!-- Products -->
+<!-- Products Section -->
 <div>
     <img class="header-image" src="{% static 'images/header_bg-1050x700.jpg' %}" alt="WatchCart Header Background">
 </div>
+
 <div class="products-container">
     {% for product in products %}
     <div class="card">
@@ -80,6 +86,18 @@
         </ul>
     </div>
 </footer>
+
+<!-- JavaScript for Mobile Menu -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+
+        menuToggle.addEventListener("click", function () {
+            navLinks.classList.toggle("show");
+        });
+    });
+</script>
 
 </body>
 </html>

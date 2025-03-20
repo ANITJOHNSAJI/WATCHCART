@@ -8,21 +8,25 @@ import random
 from datetime import datetime, timedelta
 from .models import *
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+
 
 
 def index(request):
-    products = Product.objects.all()
-    return render(request, "index.html", {"products": products})  # Corrected variable name
+    products = Product.objects.all()  # Fetch all products
+    return render(request, "index.html", {"products": products})
 def product(request, id):
     product = get_object_or_404(Product, pk=id)
 
+    # Get cart items only if the user is authenticated
+    cart_item_ids = []
     if request.user.is_authenticated:
-        # Get the IDs of products in the user's cart
-        cart_item_ids = [item.product.id for item in Cart.objects.filter(user=request.user)]
-    else:
-        cart_item_ids = []
+        cart_item_ids = list(Cart.objects.filter(user=request.user).values_list('product_id', flat=True))
 
-    return render(request, 'product.html', {'product': product, 'cart_item_ids': cart_item_ids})
+    return render(request, 'product.html', {
+        'product': product,
+        'cart_item_ids': cart_item_ids
+    })
 def usersignup(request):
     if request.method == "POST":
         email = request.POST.get('email')
@@ -263,79 +267,68 @@ def add_product(request):
 
     return render(request, 'add.html')
 
+@login_required(login_url='userlogin')
 def add_to_cart(request, id):
-    # Ensure the user is logged in
-    if not request.user.is_authenticated:
-        messages.error(request, "You need to be logged in to add items to the cart.")
-        return redirect('userlogin')  # Redirect to login page
-
-    # Get the product to be added to the cart
     product = get_object_or_404(Product, id=id)
 
-    # Check if the product already exists in the cart for the user
-    cart_item, created = Cart.objects.get_or_create(
-        user=request.user,
-        product=product,
-    )
+    cart_item, created = Cart.objects.get_or_create(user=request.user, product=product)
 
-    if not created:  # If the item already exists in the cart
-        if cart_item.product.quantity > cart_item.quantity:  # Check for stock
-            cart_item.quantity += 1
-            cart_item.save()
-        else:
-            messages.error(request, "Sorry, this product is out of stock.")
-            return redirect('cart_view')  # Redirect to cart view if out of stock
-    else:  # If this is a new cart item
-        cart_item.quantity = 1  # Set the initial quantity to 1
+    if cart_item.quantity < product.quantity:
+        cart_item.quantity += 1
         cart_item.save()
+        messages.success(request, f"{product.name} has been added to your cart.")
+    else:
+        messages.error(request, "Sorry, this product is out of stock.")
 
-    messages.success(request, f'{product.name} has been added to your cart.')
-    return redirect('cart_view')  # Redirect to the cart view page
+    return redirect('cart_view')
 
+@login_required(login_url='userlogin')
 def increment_cart(request, id):
     cart_item = get_object_or_404(Cart, id=id, user=request.user)
-    if cart_item.product.quantity > cart_item.quantity:  # Ensure there’s stock
+
+    if cart_item.quantity < cart_item.product.quantity:
         cart_item.quantity += 1
         cart_item.save()
         messages.success(request, "Quantity updated.")
     else:
-        messages.error(request, "Sorry, there is no more stock available.")
+        messages.error(request, "No more stock available.")
+
     return redirect('cart_view')
 
+@login_required(login_url='userlogin')
 def decrement_cart(request, id):
     cart_item = get_object_or_404(Cart, id=id, user=request.user)
+
     if cart_item.quantity > 1:
         cart_item.quantity -= 1
         cart_item.save()
         messages.success(request, "Quantity updated.")
     else:
-        cart_item.delete()  # Remove the item if quantity is 1 and it's decremented
-        messages.success(request, "Item removed from the cart.")
+        cart_item.delete()
+        messages.success(request, "Item removed from cart.")
+
     return redirect('cart_view')
 
-def cart_view(request):
-    # Get the cart items for the logged-in user
-    cart_items = Cart.objects.filter(user=request.user)
-    
-    # Calculate the total price of all items in the cart
-    total_price = sum(item.get_total_price() for item in cart_items)
-    
-    return render(request, 'cart.html', {
-        'cart_items': cart_items,
-        'total_price': total_price,
-    })
-
-
+@login_required(login_url='userlogin')
 def delete_cart_item(request, id):
     cart_item = get_object_or_404(Cart, id=id, user=request.user)
     cart_item.delete()
     messages.success(request, "Item removed from cart.")
     return redirect('cart_view')
 
-def checkout(request):
-    # Your checkout logic here
-    return render(request, 'checkout.html') 
+@login_required(login_url='userlogin')
+def cart_view(request):
+    cart_items = Cart.objects.filter(user=request.user)
+    total_price = sum(item.get_total_price() for item in cart_items)
 
+    return render(request, 'cart.html', {
+        'cart_items': cart_items,
+        'total_price': total_price,
+    })
+
+@login_required(login_url='userlogin')
+def checkout(request):
+    return render(request, 'checkout.html')
 
 
 # First Page (Product Listing)
