@@ -27,6 +27,23 @@ def product(request, id):
         'product': product,
         'cart_item_ids': cart_item_ids
     })
+
+def product_list(request):
+    # Fetch all products to display in the template
+    products = Product.objects.all()
+    return render(request, 'allproduct.html', {'products': products})
+
+def search_results(request):
+    query = request.GET.get('q')
+    
+    if query:
+        # Filters products whose name contains the query text (case-insensitive)
+        results = Product.objects.filter(name__icontains=query)
+    else:
+        results = Product.objects.all()  # Return all products if no query is provided
+
+    return render(request, 'search.html', {'results': results, 'query': query})
+
 def usersignup(request):
     if request.method == "POST":
         email = request.POST.get('email')

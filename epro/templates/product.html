@@ -15,6 +15,7 @@
         <a class="navbar-brand" href="#">WATCHCART</a>
         <div class="nav-links">
             <a href="{% url 'index' %}"><button>Home</button></a>
+            <a href="{% url 'product_list' %}"><button>All Products </button></a>
             <a href="{% url 'cart_view' %}"><button>Cart</button></a>
             <a href="{% url 'logout' %}"><button>Logout</button></a>
         </div>
@@ -109,7 +110,7 @@
     </div>
 </div>
 
-<!-- Customer Reviews -->
+<!-- Customer Reviews
 <div class="reviews">
     <h2>Customer Reviews</h2>
     {% for review in product.reviews.all %}
@@ -118,7 +119,7 @@
         <p>Rating: {{ review.rating }} / 5</p>
     </div>
     {% endfor %}
-</div>
+</div> -->
 
 </body>
 </html>
