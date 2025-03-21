@@ -46,6 +46,8 @@ class Cart(models.Model):
     
     def get_total_price(self):
         return self.product.offerprice * self.quantity
-
     
+
+
+
     

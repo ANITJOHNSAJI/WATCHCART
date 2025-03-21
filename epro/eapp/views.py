@@ -13,8 +13,11 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    products = Product.objects.all()  # Fetch all products
+    # Fetch the latest 4 products by ordering them by ID in descending order
+    products = Product.objects.all().order_by('-id')[:4]
+    
     return render(request, "index.html", {"products": products})
+
 def product(request, id):
     product = get_object_or_404(Product, pk=id)
 
@@ -346,7 +349,6 @@ def cart_view(request):
 @login_required(login_url='userlogin')
 def checkout(request):
     return render(request, 'checkout.html')
-
 
 # First Page (Product Listing)
 def first_page(request):

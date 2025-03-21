@@ -23,6 +23,8 @@
         <a href="{% url 'product_list' %}"><button>All Products </button></a>
         <a href="{% url 'cart_view' %}"><button>Cart</button></a>
 
+
+
         {% if user.is_authenticated %}
             <a href="{% url 'logout' %}"><button>Logout</button></a>
         {% else %}
