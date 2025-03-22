@@ -348,7 +348,34 @@ def cart_view(request):
 
 @login_required(login_url='userlogin')
 def checkout(request):
-    return render(request, 'checkout.html')
+    # Get the cart items for the logged-in user
+    cart_items = Cart.objects.filter(user=request.user)
+    
+    # Calculate the total price by summing up the prices of the cart items
+    total_price = sum(item.get_total_price() for item in cart_items)
+    
+    # Render the checkout page with the cart items and total price
+    return render(request, 'checkout.html', {'cart_items': cart_items, 'total_price': total_price})
+
+
+def process_checkout(request):
+    if request.method == 'POST':
+        # Handle checkout logic: Save the order, process payment, etc.
+        address = request.POST.get('address')
+        payment_method = request.POST.get('payment_method')
+        
+        # Example order creation (you would need to implement actual order processing)
+        order = Order.objects.create(
+            user=request.user,
+            shipping_address=address,
+            payment_method=payment_method,
+            total_price=total_price  # You'd calculate this beforehand
+        )
+        
+        # Redirect to an order confirmation page or summary page
+        return redirect('order_confirmation', order_id=order.id)
+
+    return redirect('cart_view')
 
 # First Page (Product Listing)
 def first_page(request):
