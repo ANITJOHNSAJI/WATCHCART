@@ -37,7 +37,7 @@ body {
 
 /* Form Container */
 .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 30px auto;
     padding: 20px;
     background: white;
@@ -50,20 +50,46 @@ h2 {
     color: #333;
 }
 
-/* Form Fields */
+/* Two-Column Form */
 .product-form {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
 }
 
-.product-form label {
+/* Image Upload Section (Left Column) */
+.image-upload {
+    width: 48%;
+}
+
+.image-upload label {
+    display: block;
     font-weight: bold;
     margin-top: 10px;
 }
 
-.product-form input,
-.product-form select,
-.product-form textarea {
+.image-upload input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Product Details Section (Right Column) */
+.product-details {
+    width: 48%;
+}
+
+.product-details label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+}
+
+.product-details input,
+.product-details select,
+.product-details textarea {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
@@ -75,6 +101,7 @@ h2 {
 .submit-btn {
     margin-top: 20px;
     padding: 10px;
+    width: 100%;
     background-color: #28a745;
     color: white;
     font-size: 18px;
@@ -89,7 +116,11 @@ h2 {
 
 /* Responsive */
 @media (max-width: 768px) {
-    .container {
-        width: 90%;
+    .product-form {
+        flex-direction: column;
+    }
+    .image-upload,
+    .product-details {
+        width: 100%;
     }
 }
