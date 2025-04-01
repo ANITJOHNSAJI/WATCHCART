@@ -31,10 +31,41 @@ def product(request, id):
         'cart_item_ids': cart_item_ids
     })
 
+
+
 def product_list(request):
-    # Fetch all products to display in the template
     products = Product.objects.all()
+    
+    # Get filter parameters from request
+    gender = request.GET.get('gender')
+    if gender:
+        products = products.filter(gender=gender)
+
+    # Fix: Use 'type' instead of 'display_type'
+    product_type = request.GET.get('display_type')  
+    if product_type:
+        products = products.filter(type=product_type)  # Change 'display_type' to 'type'
+
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+
+    if min_price:
+        try:
+            min_price = float(min_price)
+            products = products.filter(price__gte=min_price)
+        except ValueError:
+            pass  # Ignore invalid price input
+
+    if max_price:
+        try:
+            max_price = float(max_price)
+            products = products.filter(price__lte=max_price)
+        except ValueError:
+            pass  # Ignore invalid price input
+
+    # Render template with filtered products
     return render(request, 'allproduct.html', {'products': products})
+
 
 def search_results(request):
     query = request.GET.get('q')

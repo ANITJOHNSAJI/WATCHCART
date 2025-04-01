@@ -47,6 +47,7 @@ body {
     background-color: #ddd;
 }
 
+/* Mobile Menu Toggle */
 .menu-toggle {
     display: none;
     font-size: 24px;
@@ -82,24 +83,56 @@ body {
     background-color: #cacdce;
 }
 
+/* Filter Section */
+.filter-section {
+    width: 250px;
+    padding: 20px;
+    background: #f5f5f5;
+    border-right: 1px solid #ccc;
+}
+
+.filter-section h4 {
+    margin-bottom: 10px;
+}
+
+.filter-section label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.filter-section select,
+.filter-section input {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.filter-section button {
+    width: 100%;
+    padding: 8px;
+    background: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
 /* Product Section */
 .products-container {
+    flex: 1;
+    padding: 20px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 20px;
-    padding: 20px;
+    justify-content: center; /* Center items for better mobile layout */
 }
 
 .card {
     width: 250px;
+    padding: 10px;
+    background: #fff;
     border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
     text-align: center;
-    background: white;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease-in-out;
 }
 
 .card:hover {
@@ -178,8 +211,27 @@ body {
     text-decoration: underline;
 }
 
-/* Responsive Styles */
+/* ===================== RESPONSIVE DESIGN ===================== */
+
+/* Tablet (max-width: 1024px) */
+@media screen and (max-width: 1024px) {
+    .products-container {
+        justify-content: space-around;
+    }
+
+    .card {
+        width: 45%;
+    }
+
+    .footer {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Mobile (max-width: 768px) */
 @media screen and (max-width: 768px) {
+    /* Navbar */
     .nav-links {
         display: none;
         flex-direction: column;
@@ -201,11 +253,14 @@ body {
         display: block;
     }
 
-    .footer {
-        flex-direction: column;
+    /* Filters */
+    .filter-section {
+        width: 100%;
         text-align: center;
+        border: none;
     }
 
+    /* Products */
     .products-container {
         flex-direction: column;
         align-items: center;
@@ -214,5 +269,31 @@ body {
     .card {
         width: 90%;
         margin-bottom: 20px;
+    }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media screen and (max-width: 480px) {
+    .navbar {
+        flex-direction: column;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .search input {
+        width: 100%;
+    }
+
+    .products-container {
+        flex-direction: column;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .footer {
+        flex-direction: column;
+        text-align: center;
     }
 }

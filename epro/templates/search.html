@@ -17,6 +17,7 @@
     
         <div class="nav-links">
             <a href="{% url 'index' %}"><button>Home</button></a>
+            <a href="{% url 'product_list'%}"><button>All Products</button></a>
             <a href="{% url 'cart_view' %}"><button>Cart</button></a>
     
             {% if user.is_authenticated %}

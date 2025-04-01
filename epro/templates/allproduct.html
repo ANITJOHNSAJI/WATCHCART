@@ -13,12 +13,12 @@
         
         <!-- Mobile Menu Toggle -->
         <button class="menu-toggle">☰</button>
-    
+
         <div class="nav-links">
             <a href="{% url 'index' %}"><button>Home</button></a>
             <a href="{% url 'product_list'%}"><button>All Products</button></a>
             <a href="{% url 'cart_view' %}"><button>Cart</button></a>
-    
+
             {% if user.is_authenticated %}
                 <a href="{% url 'logout' %}"><button>Logout</button></a>
             {% else %}
@@ -29,9 +29,40 @@
             <form method="GET" action="{% url 'search_results' %}">
                 <input type="text" name="q" placeholder="Search products..." required>
                 <button type="submit">Search</button>
+            </form>
+        </div>
     </nav>
-    
-    
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <h4>Filter Products</h4>
+        <form method="GET" action="{% url 'product_list' %}">
+            <label for="gender">Gender:</label>
+            <select name="gender" id="gender">
+                <option value="">All</option>
+                <option value="Male">Men</option>
+                <option value="Female">Women</option>
+                <option value="Unisex">Unisex</option>
+            </select>
+
+            <label for="display_type">Display Type:</label>
+            <select name="display_type" id="display_type">
+                <option value="">All</option>
+                <option value="Analogue">Analog</option>
+                <option value="Digital">Digital</option>
+                <option value="Analogue/Digital">Analogue/Digital</option>
+            </select>
+
+            <label for="min_price">Min Price:</label>
+            <input type="number" name="min_price" id="min_price" placeholder="Min price">
+
+            <label for="max_price">Max Price:</label>
+            <input type="number" name="max_price" id="max_price" placeholder="Max price">
+
+            <button type="submit">Apply Filters</button>
+        </form>
+    </div>
+
     <!-- Products Section -->
     <div class="products-container">
         {% for product in products %}
@@ -47,7 +78,7 @@
         </div>
         {% endfor %}
     </div>
-    
+
     <!-- Footer -->
     <footer class="footer">
         <div class="foot1">
@@ -84,5 +115,11 @@
             </ul>
         </div>
     </footer>
+    <script>
+        document.querySelector(".menu-toggle").addEventListener("click", function () {
+            document.querySelector(".nav-links").classList.toggle("show");
+        });
+        </script>
+        
 </body>
 </html>
