@@ -1,4 +1,4 @@
-/* General Styles */
+/* =================== GENERAL STYLES =================== */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -6,7 +6,7 @@ body {
     background-color: #f8f9fa;
 }
 
-/* Navbar */
+/* =================== NAVBAR =================== */
 .navbar {
     background-color: #333;
     color: white;
@@ -14,6 +14,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    position: relative;
 }
 
 .navbar .navbar-brand {
@@ -21,11 +23,19 @@ body {
     font-weight: bold;
     color: white;
     text-decoration: none;
+    margin-right: 20px;
 }
 
+/* Swapped layout: buttons left, search right */
 .nav-links {
+    order: 1;
     display: flex;
     gap: 15px;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    text-decoration: none;
 }
 
 .nav-links button {
@@ -33,9 +43,61 @@ body {
     border: none;
     padding: 8px 15px;
     cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background 0.3s ease;
 }
 
-/* Cart Page */
+.nav-links button:hover {
+    background-color: #ddd;
+}
+
+.search {
+    order: 2;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.search form {
+    display: flex;
+    border-radius: 5px;
+    overflow: hidden;
+    background: white;
+}
+
+.search input {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    width: 220px;
+}
+
+.search button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.search button:hover {
+    background-color: #ff4c4c;
+}
+
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* =================== CART CONTAINER =================== */
 .cart-container {
     max-width: 1000px;
     margin: 40px auto;
@@ -51,7 +113,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* Cart Items */
+/* =================== CART ITEMS =================== */
 ul {
     list-style: none;
     padding: 0;
@@ -100,7 +162,7 @@ ul {
     background-color: #0056b3;
 }
 
-/* Remove Button */
+/* =================== REMOVE BUTTON =================== */
 .delete-button {
     background-color: #dc3545;
     padding: 8px 12px;
@@ -115,7 +177,7 @@ ul {
     background-color: #c82333;
 }
 
-/* Cart Summary */
+/* =================== CART SUMMARY =================== */
 .cart-summary {
     display: flex;
     justify-content: space-between;
@@ -130,7 +192,7 @@ ul {
     font-weight: bold;
 }
 
-/* Checkout Button */
+/* =================== CHECKOUT BUTTON =================== */
 .checkout-btn {
     padding: 12px 25px;
     background-color: #28a745;
@@ -145,15 +207,61 @@ ul {
     background-color: #218838;
 }
 
-/* Empty Cart Message */
+/* =================== EMPTY CART MESSAGE =================== */
 .cart-container p {
     text-align: center;
     font-size: 18px;
     color: #888;
 }
 
-/* Responsive */
+/* =================== RESPONSIVE =================== */
 @media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .nav-links {
+        order: 2;
+        display: none;
+        flex-direction: column;
+        background-color: #333;
+        position: absolute;
+        top: 60px;
+        width: 100%;
+        left: 0;
+        padding: 10px 0;
+        z-index: 1000;
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    .nav-links button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .menu-toggle {
+        display: block;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+
+    .search {
+        order: 1;
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .search form {
+        width: 90%;
+    }
+
     .cart-item {
         flex-direction: column;
         align-items: flex-start;
@@ -171,5 +279,19 @@ ul {
     .checkout-btn {
         width: 100%;
         margin-top: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search input {
+        width: 100%;
+    }
+
+    .search form {
+        width: 100%;
+    }
+
+    .checkout-btn {
+        font-size: 16px;
     }
 }

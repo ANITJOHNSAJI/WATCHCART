@@ -1,4 +1,4 @@
-/* General Styles */
+/* =================== GLOBAL STYLES =================== */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -7,7 +7,7 @@ body {
     color: #333;
 }
 
-/* Navbar */
+/* =================== NAVBAR =================== */
 .navbar {
     background-color: #333;
     color: white;
@@ -16,6 +16,7 @@ body {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    flex-wrap: wrap;
 }
 
 .navbar-brand {
@@ -23,11 +24,15 @@ body {
     font-weight: bold;
     text-decoration: none;
     color: white;
+    margin-right: 20px;
 }
 
+/* === Swapped Positions === */
 .nav-links {
+    order: 1;
     display: flex;
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .nav-links a {
@@ -35,19 +40,58 @@ body {
 }
 
 .nav-links button {
-    background-color: white;
+    background-color: transparent;
     border: none;
+    color: white;
     padding: 8px 15px;
     cursor: pointer;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 16px;
+    transition: background 0.3s ease;
 }
 
 .nav-links button:hover {
-    background-color: #ddd;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Mobile Menu Toggle */
+.search {
+    order: 2;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-left: auto;
+}
+
+.search form {
+    display: flex;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    overflow: hidden;
+    background: white;
+}
+
+.search input {
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    width: 250px;
+}
+
+.search button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.search button:hover {
+    background-color: #ff5252;
+}
+
 .menu-toggle {
     display: none;
     font-size: 24px;
@@ -55,35 +99,10 @@ body {
     background: none;
     border: none;
     color: white;
+    margin-left: auto;
 }
 
-/* Search Bar */
-.search form {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.search input[type="text"] {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #000000;
-    width: 250px;
-}
-
-.search button {
-    padding: 8px 15px;
-    border-radius: 5px;
-    background-color: #f1f1f1;
-    color: rgb(54, 50, 50);
-    cursor: pointer;
-}
-
-.search button:hover {
-    background-color: #cacdce;
-}
-
-/* Filter Section */
+/* =================== FILTER SECTION =================== */
 .filter-section {
     width: 250px;
     padding: 20px;
@@ -116,23 +135,25 @@ body {
     cursor: pointer;
 }
 
-/* Product Section */
+/* =================== PRODUCTS =================== */
 .products-container {
     flex: 1;
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: center; /* Center items for better mobile layout */
+    justify-content: center;
 }
 
 .card {
     width: 250px;
-    padding: 10px;
-    background: #fff;
+    background: white;
     border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
     text-align: center;
     transition: transform 0.2s ease-in-out;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .card:hover {
@@ -163,19 +184,17 @@ body {
 
 .card-body del {
     color: #999;
-    font-size: 14px;
 }
 
 .card-body strong {
     color: #333;
-    font-size: 16px;
 }
 
-/* Footer */
+/* =================== FOOTER =================== */
 .footer {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     background-color: #333;
     color: white;
     padding: 20px;
@@ -186,6 +205,7 @@ body {
     flex: 1;
     min-width: 200px;
     margin: 10px;
+    text-align: center;
 }
 
 .footer ul {
@@ -211,9 +231,7 @@ body {
     text-decoration: underline;
 }
 
-/* ===================== RESPONSIVE DESIGN ===================== */
-
-/* Tablet (max-width: 1024px) */
+/* =================== RESPONSIVE DESIGN =================== */
 @media screen and (max-width: 1024px) {
     .products-container {
         justify-content: space-around;
@@ -229,19 +247,24 @@ body {
     }
 }
 
-/* Mobile (max-width: 768px) */
 @media screen and (max-width: 768px) {
-    /* Navbar */
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
     .nav-links {
+        order: 2;
         display: none;
         flex-direction: column;
         background-color: #333;
         position: absolute;
-        right: 0;
         top: 60px;
-        width: 200px;
-        padding: 10px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        left: 0;
+        text-align: center;
+        padding: 10px 0;
         z-index: 1000;
     }
 
@@ -249,18 +272,36 @@ body {
         display: flex;
     }
 
+    .nav-links button {
+        width: 100%;
+        text-align: center;
+    }
+
+    .search {
+        order: 1;
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .search form {
+        width: 90%;
+    }
+
+    .search input {
+        width: 100%;
+    }
+
     .menu-toggle {
         display: block;
     }
 
-    /* Filters */
     .filter-section {
         width: 100%;
         text-align: center;
         border: none;
     }
 
-    /* Products */
     .products-container {
         flex-direction: column;
         align-items: center;
@@ -270,9 +311,13 @@ body {
         width: 90%;
         margin-bottom: 20px;
     }
+
+    .footer {
+        flex-direction: column;
+        text-align: center;
+    }
 }
 
-/* Small Mobile (max-width: 480px) */
 @media screen and (max-width: 480px) {
     .navbar {
         flex-direction: column;
