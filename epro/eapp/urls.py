@@ -28,6 +28,12 @@ urlpatterns = [
     path('search/', views.search_results, name='search_results'),
     path('product_list/', views.product_list, name='product_list'), 
     path('process_checkout/', views.process_checkout, name='process_checkout'),
+    path('profile/', views.profile_view, name='profile'),
+    path('profile/add-address/', views.add_address, name='add_address'),
+    path('profile/edit-address/<int:address_id>/', views.edit_address, name='edit_address'),
+    path('profile/delete-address/<int:address_id>/', views.delete_address, name='delete_address'),
+    path('profile/edit-email/', views.edit_email, name='edit_email'),
+    path('profile/edit-username/', views.edit_username, name='edit_username'),
    
     
 ]

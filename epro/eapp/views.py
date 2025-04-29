@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    # Fetch the latest 4 products by ordering them by ID in descending order
+ 
     products = Product.objects.all().order_by('-id')[:4]
     
     return render(request, "index.html", {"products": products})
@@ -21,7 +21,6 @@ def index(request):
 def product(request, id):
     product = get_object_or_404(Product, pk=id)
 
-    # Get cart items only if the user is authenticated
     cart_item_ids = []
     if request.user.is_authenticated:
         cart_item_ids = list(Cart.objects.filter(user=request.user).values_list('product_id', flat=True))
@@ -30,21 +29,195 @@ def product(request, id):
         'product': product,
         'cart_item_ids': cart_item_ids
     })
+    
+def profile_view(request):
+    """View to display user profile with addresses"""
+
+    addresses = Address.objects.filter(user=request.user)
+    
+    context = {
+        'addresses': addresses,
+        'email': request.user.email, 
+    }
+    return render(request, 'profile.html', context)
+
+@login_required
+def add_address(request):
+    """View to add a new address without using Django forms"""
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        address = request.POST.get('address', '')
+        phone = request.POST.get('phone', '')
+        
+        # Basic validation
+        errors = {}
+        if not name:
+            errors['name'] = 'Name is required.'
+        if not address:
+            errors['address'] = 'Address is required.'
+        if not phone:
+            errors['phone'] = 'Phone number is required.'
+        
+        if not errors:
+            # Create new address
+            Address.objects.create(
+                user=request.user,
+                name=name,
+                address=address,
+                phone=phone
+            )
+            messages.success(request, 'Address added successfully!')
+            return redirect('profile')
+        else:
+           
+            return render(request, 'address.html', {
+                'errors': errors,
+                'name': name,
+                'address': address,
+                'phone': phone,
+                'action': 'Add'
+            })
+    
+    return render(request, 'address.html', {'action': 'Add'})
+
+@login_required
+def edit_address(request, address_id):
+    """View to edit an existing address without using Django forms"""
+    # Get address or return 404 if not found
+    address_obj = get_object_or_404(Address, id=address_id, user=request.user)
+    
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        address = request.POST.get('address', '')
+        phone = request.POST.get('phone', '')
+        
+        # Basic validation
+        errors = {}
+        if not name:
+            errors['name'] = 'Name is required.'
+        if not address:
+            errors['address'] = 'Address is required.'
+        if not phone:
+            errors['phone'] = 'Phone number is required.'
+        
+        if not errors:
+            # Update address
+            address_obj.name = name
+            address_obj.address = address
+            address_obj.phone = phone
+            address_obj.save()
+            messages.success(request, 'Address updated successfully!')
+            return redirect('profile')
+        else:
+ 
+            return render(request, 'address.html', {
+                'errors': errors,
+                'name': name,
+                'address': address,
+                'phone': phone,
+                'action': 'Edit'
+            })
+    
+   
+    return render(request, 'address.html', {
+        'name': address_obj.name,
+        'address': address_obj.address,
+        'phone': address_obj.phone,
+        'action': 'Edit'
+    })
+
+@login_required
+def delete_address(request, address_id):
+    """View to delete an address"""
+    address = get_object_or_404(Address, id=address_id, user=request.user)
+    
+    if request.method == 'POST':
+        address.delete()
+        messages.success(request, 'Address deleted successfully!')
+        return redirect('profile')
+    
+    return render(request, 'confirm_delete.html', {'address': address})
+@login_required
+def edit_email(request):
+    """View to edit user's email"""
+    user = request.user
+    
+    if request.method == 'POST':
+        email = request.POST.get('email', '')
+        
+        # Basic validation
+        errors = {}
+        if not email:
+            errors['email'] = 'Email is required.'
+        elif '@' not in email:
+            errors['email'] = 'Please enter a valid email address.'
+            
+        if not errors:
+            # Update email
+            user.email = email
+            user.save()
+            messages.success(request, 'Email updated successfully!')
+            return redirect('profile')
+        else:
+            # If there are errors, pass them to the template
+            return render(request, 'email.html', {
+                'errors': errors,
+                'email': email
+            })
+    
+    
+    return render(request, 'email.html', {
+        'email': user.email
+    })
+
+@login_required
+def edit_username(request):
+    """View to edit user's username"""
+    user = request.user
+    
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        
+        # Basic validation
+        errors = {}
+        if not username:
+            errors['username'] = 'Username is required.'
+        elif len(username) < 4:
+            errors['username'] = 'Username should be at least 4 characters long.'
+        elif User.objects.filter(username=username).exists():
+            errors['username'] = 'This username is already taken.'
+            
+        if not errors:
+            # Update username
+            user.username = username
+            user.save()
+            messages.success(request, 'Username updated successfully!')
+            return redirect('profile')
+        else:
+            # If there are errors, pass them to the template
+            return render(request, 'username.html', {
+                'errors': errors,
+                'username': username
+            })
+    
+    # Pre-fill form with existing username
+    return render(request, 'username.html', {
+        'username': user.username
+    }) 
 
 
 
 def product_list(request):
     products = Product.objects.all()
-    
-    # Get filter parameters from request
+
     gender = request.GET.get('gender')
     if gender:
         products = products.filter(gender=gender)
 
-    # Fix: Use 'type' instead of 'display_type'
+   
     product_type = request.GET.get('display_type')  
     if product_type:
-        products = products.filter(type=product_type)  # Change 'display_type' to 'type'
+        products = products.filter(type=product_type)
 
     min_price = request.GET.get('min_price')
     max_price = request.GET.get('max_price')
@@ -54,7 +227,7 @@ def product_list(request):
             min_price = float(min_price)
             products = products.filter(price__gte=min_price)
         except ValueError:
-            pass  # Ignore invalid price input
+            pass  
 
     if max_price:
         try:

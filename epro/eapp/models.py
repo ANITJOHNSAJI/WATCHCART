@@ -47,6 +47,13 @@ class Cart(models.Model):
     def get_total_price(self):
         return self.product.offerprice * self.quantity
     
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name=models.CharField(max_length=225)
+    address=models.TextField()
+    phone=models.CharField(max_length=12)
+
+    
 
 
     
