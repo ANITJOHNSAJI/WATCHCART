@@ -29,7 +29,7 @@ def product(request, id):
         'product': product,
         'cart_item_ids': cart_item_ids
     })
-    
+@login_required(login_url='userlogin')    
 def profile_view(request):
     """View to display user profile with addresses"""
 

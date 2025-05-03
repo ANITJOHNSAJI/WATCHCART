@@ -1,344 +1,300 @@
-/* =================== GLOBAL STYLES =================== */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* Reset and Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* =================== NAVBAR =================== */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff;
+  color: #000;
+  line-height: 1.6;
+}
+
+/* Navbar */
 .navbar {
-    background-color: #333;
-    color: white;
-    padding: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    flex-wrap: wrap;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  position: relative;
 }
 
 .navbar-brand {
-    font-size: 24px;
-    font-weight: bold;
-    text-decoration: none;
-    color: white;
-    margin-right: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+  text-decoration: none;
+  margin-right: 20px;
 }
 
-/* === Swapped Positions === */
-.nav-links {
-    order: 1;
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.nav-links a {
-    text-decoration: none;
-}
-
-.nav-links button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    padding: 8px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: background 0.3s ease;
-}
-
-.nav-links button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
+/* Search */
 .search {
-    order: 2;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-left: auto;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  order: 2;
 }
 
 .search form {
-    display: flex;
-    border: 2px solid #fff;
-    border-radius: 5px;
-    overflow: hidden;
-    background: white;
+  display: flex;
+  max-width: 400px;
+  width: 100%;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .search input {
-    padding: 10px;
-    font-size: 16px;
-    border: none;
-    outline: none;
-    width: 250px;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  flex: 1;
+  outline: none;
+  background-color: transparent;
+  color: #000;
 }
 
 .search button {
-    background-color: #ff6b6b;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s ease;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
 }
 
 .search button:hover {
-    background-color: #ff5252;
+  background-color: #333;
 }
 
+/* Mobile Menu Toggle */
 .menu-toggle {
-    display: none;
-    font-size: 24px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    color: white;
-    margin-left: auto;
+  display: none;
+  font-size: 26px;
+  background: none;
+  border: none;
+  color: #000;
+  cursor: pointer;
 }
 
-/* =================== FILTER SECTION =================== */
-.filter-section {
-    width: 250px;
-    padding: 20px;
-    background: #f5f5f5;
-    border-right: 1px solid #ccc;
+/* Nav Links */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+  order: 3;
 }
 
-.filter-section h4 {
-    margin-bottom: 10px;
+.nav-links a {
+  text-decoration: none;
 }
 
-.filter-section label {
-    display: block;
-    margin-bottom: 5px;
+.nav-links button {
+  background: none;
+  border: none;
+  font-size: 15px;
+  padding: 8px 12px;
+  font-weight: 500;
+  color: #000;
+  transition: all 0.3s ease;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
 }
 
-.filter-section select,
-.filter-section input {
-    width: 100%;
-    padding: 5px;
-    margin-bottom: 10px;
+.nav-links button:hover {
+  color: #000;
+  border-bottom: 2px solid #000;
 }
 
-.filter-section button {
-    width: 100%;
-    padding: 8px;
-    background: #333;
-    color: #fff;
-    border: none;
-    cursor: pointer;
+/* Filter Section */
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 40px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #eee;
 }
 
-/* =================== PRODUCTS =================== */
+.filter-container h4 {
+  font-size: 18px;
+  margin-right: 10px;
+  color: #333;
+}
+
+.filter-container form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-container label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.filter-container select,
+.filter-container input[type="number"] {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  min-width: 120px;
+}
+
+.filter-container button[type="submit"] {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.filter-container button[type="submit"]:hover {
+  background-color: #333;
+}
+
+/* Products Section */
 .products-container {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  padding: 40px;
 }
 
 .card {
-    width: 250px;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    text-align: center;
-    transition: transform 0.2s ease-in-out;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.3s ease, border 0.3s ease;
+  border: 2px solid #ccc;
 }
 
 .card:hover {
-    transform: scale(1.05);
+  transform: translateY(-5px);
+  border-color: #000;
 }
 
 .card img {
-    width: 100%;
-    height: 200px;
-    object-fit: contain;
-    background-color: #f4f4f4;
+  width: 100%;
+  height: 250px;
+  object-fit: contain;
+  background-color: #f1f1f1;
 }
 
 .card-body {
-    padding: 10px;
+  padding: 15px;
+  text-align: center;
 }
 
 .card-body h5 {
-    margin: 10px 0 5px;
-    font-size: 18px;
-    font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 5px;
+  color: #000;
 }
 
 .card-body p {
-    margin: 5px 0;
-    font-size: 14px;
+  font-size: 14px;
+  color: #555;
+  margin: 5px 0;
 }
 
-.card-body del {
-    color: #999;
-}
-
-.card-body strong {
-    color: #333;
-}
-
-/* =================== FOOTER =================== */
+/* Footer */
 .footer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    background-color: #333;
-    color: white;
-    padding: 20px;
-    text-align: left;
+  background-color: #000;
+  color: #eee;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 30px 20px;
+  border-top: 1px solid #222;
 }
 
 .footer div {
-    flex: 1;
-    min-width: 200px;
-    margin: 10px;
-    text-align: center;
+  flex: 1;
+  min-width: 200px;
+  margin: 10px;
+  text-align: center;
 }
 
 .footer ul {
-    list-style-type: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .footer li {
-    margin: 5px 0;
+  margin-bottom: 10px;
+  font-size: 14px;
 }
 
-.footer b {
-    font-size: 16px;
+.footer li:first-child {
+  font-weight: bold;
+  color: #fff;
 }
 
-.footer a {
-    text-decoration: none;
-    color: white;
-    font-size: 14px;
-}
-
-.footer a:hover {
-    text-decoration: underline;
-}
-
-/* =================== RESPONSIVE DESIGN =================== */
-@media screen and (max-width: 1024px) {
-    .products-container {
-        justify-content: space-around;
-    }
-
-    .card {
-        width: 45%;
-    }
-
-    .footer {
-        flex-direction: column;
-        text-align: center;
-    }
-}
-
+/* Responsive */
 @media screen and (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
+  .navbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
-    .nav-links {
-        order: 2;
-        display: none;
-        flex-direction: column;
-        background-color: #333;
-        position: absolute;
-        top: 60px;
-        width: 100%;
-        left: 0;
-        text-align: center;
-        padding: 10px 0;
-        z-index: 1000;
-    }
+  .menu-toggle {
+    display: block;
+    align-self: flex-end;
+  }
 
-    .nav-links.show {
-        display: flex;
-    }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: #fff;
+    margin-top: 10px;
+  }
 
-    .nav-links button {
-        width: 100%;
-        text-align: center;
-    }
+  .nav-links.show {
+    display: flex;
+  }
 
-    .search {
-        order: 1;
-        width: 100%;
-        justify-content: center;
-        margin-top: 10px;
-    }
+  .search {
+    order: 2;
+    width: 100%;
+    margin: 10px 0;
+  }
 
-    .search form {
-        width: 90%;
-    }
+  .filter-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 
-    .search input {
-        width: 100%;
-    }
+  .filter-container form {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .menu-toggle {
-        display: block;
-    }
-
-    .filter-section {
-        width: 100%;
-        text-align: center;
-        border: none;
-    }
-
-    .products-container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .card {
-        width: 90%;
-        margin-bottom: 20px;
-    }
-
-    .footer {
-        flex-direction: column;
-        text-align: center;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .navbar {
-        flex-direction: column;
-        padding: 10px;
-        text-align: center;
-    }
-
-    .search input {
-        width: 100%;
-    }
-
-    .products-container {
-        flex-direction: column;
-    }
-
-    .card {
-        width: 100%;
-    }
-
-    .footer {
-        flex-direction: column;
-        text-align: center;
-    }
+  .footer {
+    flex-direction: column;
+    text-align: center;
+  }
 }
