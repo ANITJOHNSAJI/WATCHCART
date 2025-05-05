@@ -2,71 +2,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
-    <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout</title>
+  <link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+  <style>
+    .hidden { display: none; }
+    .address-box { border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; }
+    textarea, input, select { width: 100%; padding: 8px; margin: 5px 0; }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a class="navbar-brand" href="#">WATCHCART</a>
-        <div class="nav-links">
-            <a href="{% url 'index' %}"><button>Home</button></a>
-            <a href="{% url 'cart_view' %}"><button>Cart</button></a>
-            <a href="{% url 'logout' %}"><button>Logout</button></a>
-        </div>
-    </nav>
 
-    <div class="checkout-container">
-        <h1>Checkout</h1>
-        {% if cart_items %}
-        <div class="order-summary">
-            <h2>Your Order</h2>
-            <ul>
-                {% for item in cart_items %}
-                <li class="cart-item">
-                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
-                    <div class="cart-item-details">
-                        <p><strong>{{ item.product.name }}</strong></p>
-                        <p>Price: ₹{{ item.product.offerprice }}</p>
-                        <p>Quantity: {{ item.quantity|default:1 }}</p>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-            <div class="order-total">
-                <p><strong>Total Price:</strong> ₹{{ total_price }}</p>
-            </div>
-        </div>
-
-        <div class="billing-details">
-            <h2>Billing Information</h2>
-            <form method="POST" action="{% url 'process_checkout' %}">
-                {% csrf_token %}
-                <label for="address">Shipping Address:</label>
-                <textarea id="address" name="address" rows="4" placeholder="Enter your shipping address" required></textarea><br><br>
-
-                <label for="payment-method">Payment Method:</label>
-                <select id="payment-method" name="payment_method" required>
-                    <option value="credit_card">Credit Card</option>
-                    <option value="debit_card">Debit Card</option>
-                    <option value="net_banking">Net Banking</option>
-                    <option value="cod">Cash on Delivery</option>
-                </select><br><br>
-
-                {% if is_single %}
-                    <input type="hidden" name="is_single" value="True">
-                    <input type="hidden" name="product_id" value="{{ product_id }}">
-                {% endif %}
-
-                <button type="submit" class="checkout-btn">Proceed to Payment</button>
-            </form>
-        </div>
-        {% else %}
-        <p>Your cart is empty. Please add items to your cart before proceeding to checkout.</p>
-        {% endif %}
+  <nav class="navbar">
+    <a class="navbar-brand" href="#">WATCHCART</a>
+    <div class="nav-links">
+      <a href="{% url 'index' %}"><button>Home</button></a>
+      <a href="{% url 'cart_view' %}"><button>Cart</button></a>
+      <a href="{% url 'logout' %}"><button>Logout</button></a>
     </div>
-     <!-- Footer -->
+  </nav>
+
+  <div class="checkout-container">
+    <h1>Checkout</h1>
+
+    {% if cart_items %}
+    <div class="order-summary">
+      <h2>Your Order</h2>
+      <ul>
+        {% for item in cart_items %}
+        <li class="cart-item">
+          <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+          <div class="cart-item-details">
+            <p><strong>{{ item.product.name }}</strong></p>
+            <p>Price: ₹{{ item.product.offerprice }}</p>
+            <p>Quantity: {{ item.quantity|default:1 }}</p>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      <div class="order-total">
+        <p><strong>Total Price:</strong> ₹{{ total_price }}</p>
+      </div>
+    </div>
+
+    <div class="billing-details">
+      <h2>Shipping Address</h2>
+      <form method="POST" action="{% url 'process_checkout' %}">
+        {% csrf_token %}
+
+        <label><input type="radio" name="address_choice" value="default" checked onchange="toggleAddress()"> Use default address</label><br>
+        {% if default_address %}
+          <div class="address-box">
+            <p><strong>{{ default_address.name }}</strong></p>
+            <p>{{ default_address.address }}</p>
+            <p>{{ default_address.phone }}</p>
+          </div>
+        {% else %}
+          <p>No default address saved.</p>
+        {% endif %}
+
+        <label><input type="radio" name="address_choice" value="new" onchange="toggleAddress()"> Enter new address</label><br>
+
+        <div id="new-address-fields" class="hidden">
+          <label for="name">Full Name:</label>
+          <input type="text" id="name" name="name" placeholder="Your name">
+
+          <label for="phone">Phone Number:</label>
+          <input type="text" id="phone" name="phone" placeholder="Your phone number">
+
+          <label for="address">Shipping Address:</label>
+          <textarea id="address" name="address" rows="4" placeholder="Enter your shipping address"></textarea>
+        </div>
+
+        <label for="payment-method">Payment Method:</label>
+        <select id="payment-method" name="payment_method" required>
+          <option value="">Select</option>
+          <option value="online">Online Payment</option>
+          <option value="cod">Cash on Delivery</option>
+        </select><br><br>
+
+        {% if is_single %}
+          <input type="hidden" name="is_single" value="True">
+          <input type="hidden" name="product_id" value="{{ product_id }}">
+        {% endif %}
+
+        <button type="submit" class="checkout-btn">Place Order</button>
+      </form>
+    </div>
+    {% else %}
+      <p>Your cart is empty. Please add items to your cart before checking out.</p>
+    {% endif %}
+  </div>
+
   <footer class="footer">
     <div class="foot1">
       <ul>
@@ -102,5 +130,14 @@
       </ul>
     </div>
   </footer>
+
+  <script>
+    function toggleAddress() {
+      const newAddressFields = document.getElementById('new-address-fields');
+      const selected = document.querySelector('input[name="address_choice"]:checked').value;
+      newAddressFields.classList.toggle('hidden', selected !== 'new');
+    }
+    window.onload = toggleAddress;
+  </script>
 </body>
 </html>

@@ -12,8 +12,7 @@ urlpatterns = [
     path('verifyotp',views.verifyotp,name='verifyotp'),
     path('passwordreset',views.passwordreset,name='passwordreset'),
     path('logout/', views.logoutuser, name="logout"),
-    path('category',views.category,name="category"),
-    path('bookings',views.bookings,name="bookings"),
+    path('adminbookings/', views.admin_bookings, name='admin_bookings'),   
     path('add/', views.add_product, name='add_product'),
     path('edit/<int:id>/', views.edit_g, name='edit_g'),
     path('delete/<int:id>/', views.delete_g, name='delete_g'),
@@ -35,6 +34,9 @@ urlpatterns = [
     path('profile/delete-address/<int:address_id>/', views.delete_address, name='delete_address'),
     path('profile/edit-email/', views.edit_email, name='edit_email'),
     path('profile/edit-username/', views.edit_username, name='edit_username'),
+    path('order_confirmation/<int:order_id>/',views.order_confirmation,name='order_confirmation'),
+    path('order/<int:order_id>/', views.order_detail, name='order_detail'),
+
    
     
 ]

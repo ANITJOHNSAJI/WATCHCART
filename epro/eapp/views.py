@@ -29,18 +29,16 @@ def product(request, id):
         'product': product,
         'cart_item_ids': cart_item_ids
     })
-@login_required(login_url='userlogin')    
+
+@login_required
 def profile_view(request):
-    """View to display user profile with addresses"""
-
     addresses = Address.objects.filter(user=request.user)
-    
-    context = {
+    orders = Order.objects.filter(user=request.user).order_by('-date_ordered')
+    return render(request, 'profile.html', {
+        'email': request.user.email,
         'addresses': addresses,
-        'email': request.user.email, 
-    }
-    return render(request, 'profile.html', context)
-
+        'orders': orders
+    })
 @login_required
 def add_address(request):
     """View to add a new address without using Django forms"""
@@ -378,12 +376,16 @@ def passwordreset(request):
 
 
 
-def category(request):
-    return render(request, 'category.html')
+def admin_bookings(request):
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        order = get_object_or_404(Order, id=order_id)
+        order.status = 'Confirmed'
+        order.save()
+        return redirect('admin_bookings')
 
-
-def bookings(request):
-    return render(request, 'bookings.html')
+    orders = Order.objects.all().order_by('-date_ordered')
+    return render(request, 'admin_bookings.html', {'orders': orders})
 
 
 def delete_g(request, id):
@@ -550,13 +552,18 @@ def cart_view(request):
         'total_price': total_price,
     })
 
+
 @login_required(login_url='userlogin')
 def checkout_cart(request):
     cart_items = Cart.objects.filter(user=request.user)
     total_price = sum(item.get_total_price() for item in cart_items)
-    return render(request, 'checkout.html', {'cart_items': cart_items, 'total_price': total_price})
+    default_address = Address.objects.filter(user=request.user, is_default=True).first()
+    return render(request, 'checkout.html', {
+        'cart_items': cart_items,
+        'total_price': total_price,
+        'default_address': default_address
+    })
 
-# Checkout a single product by id
 @login_required(login_url='userlogin')
 def checkout_single(request, id):
     product = get_object_or_404(Product, id=id)
@@ -566,41 +573,87 @@ def checkout_single(request, id):
         'get_total_price': lambda: product.offerprice
     }]
     total_price = product.offerprice
-    return render(request, 'checkout.html', {'cart_items': cart_items, 'total_price': total_price, 'is_single': True, 'product_id': product.id})
+    default_address = Address.objects.filter(user=request.user, is_default=True).first()
+    return render(request, 'checkout.html', {
+        'cart_items': cart_items,
+        'total_price': total_price,
+        'is_single': True,
+        'product_id': product.id,
+        'default_address': default_address
+    })
 
 # Handle form submission
 @login_required(login_url='userlogin')
 def process_checkout(request):
     if request.method == 'POST':
-        address = request.POST.get('address')
+        address_choice = request.POST.get('address_choice')
         payment_method = request.POST.get('payment_method')
         is_single = request.POST.get('is_single') == 'True'
         product_id = request.POST.get('product_id')
 
+        if address_choice == 'default':
+            user_address = Address.objects.filter(user=request.user).first()
+            if not user_address:
+                messages.error(request, "No default address found.")
+                return redirect('checkout_cart')
+            shipping_address = user_address.address
+            name = user_address.name
+            phone = user_address.phone
+        else:
+            shipping_address = request.POST.get('address')
+            name = request.POST.get('name')
+            phone = request.POST.get('phone')
+
+        # Create order but don't mark as paid yet
         if is_single and product_id:
             product = get_object_or_404(Product, id=product_id)
             total_price = product.offerprice
-            # Save order logic here
             order = Order.objects.create(
                 user=request.user,
-                shipping_address=address,
+                name=name,
+                phone=phone,
+                shipping_address=shipping_address,
                 payment_method=payment_method,
                 total_price=total_price
             )
+            OrderItem.objects.create(order=order, product=product, quantity=1)
+
         else:
             cart_items = Cart.objects.filter(user=request.user)
             total_price = sum(item.get_total_price() for item in cart_items)
             order = Order.objects.create(
                 user=request.user,
-                shipping_address=address,
+                name=name,
+                phone=phone,
+                shipping_address=shipping_address,
                 payment_method=payment_method,
                 total_price=total_price
             )
-            cart_items.delete()  # Clear cart
+            for item in cart_items:
+                OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity)
+            cart_items.delete()
 
-        return redirect('order_confirmation', order_id=order.id)
+        if payment_method == 'cod':
+            order.is_paid = False
+            order.save()
+            return redirect('order_confirmation', order_id=order.id)
+        else:
+            # Redirect to Razorpay with order.id
+            return redirect('start_razorpay_payment', order_id=order.id)
 
     return redirect('cart_view')
+
+
+@login_required(login_url='userlogin')
+def order_confirmation(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return render(request, 'order_confirmation.html', {'order': order})
+
+
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return render(request, 'order_detail.html', {'order': order})
+
 
 # First Page (Product Listing)
 def first_page(request):

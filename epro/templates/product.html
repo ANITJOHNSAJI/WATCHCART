@@ -122,6 +122,7 @@
         <p class="description">{{ product.description }}</p>
         
         <p class="stock">
+            {{product.quantity}}
             {% if product.quantity > 0 %}
                 <span class="in-stock">In Stock</span>
             {% else %}
@@ -131,7 +132,7 @@
 
         <div class="buttons">
             <a href="{% url 'checkout_single' product.id %}">
-                <button class="buy-now-btn">Buy Now</button>
+                <button >Buy Now</button>
             </a>
             
             
