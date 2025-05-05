@@ -1,78 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    background-image: url('../images/bg.jpg');
-    background-size: cover;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 div {
-    background: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
-    padding: 30px; /* Increased padding for better spacing */
-    border-radius: 10px;
-    backdrop-filter: blur(10px); /* Blurry glass effect */
-    text-align: center;
-    width: 350px; /* Increased width for better alignment */
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
 }
 
 h1 {
-    color: goldenrod; /* Golden color for header text */
-    margin-bottom: 20px; /* Added margin for space between heading and form */
+  margin-bottom: 30px;
+  font-size: 28px;
+  color: #333;
 }
 
 form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-input[type="text"], input[type="password"], input[type="submit"] {
-    width: 90%; /* Set width to 90% for input fields */
-    padding: 12px; /* Increased padding for more comfortable inputs */
-    margin: 12px 0; /* Increased margin between input fields */
-    border: 2px solid black; /* Black border for input fields */
-    border-radius: 5px;
-    background: rgba(0, 0, 0, 0.2); /* Transparent black background */
-    color: goldenrod; /* Set text color to yellow */
-    font-size: 16px; /* Improved font size for readability */
+input[type="text"],
+input[type="password"] {
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: border 0.3s ease;
 }
 
-input::placeholder {
-    color: goldenrod; /* Set placeholder text color to golden */
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #000;
+  outline: none;
 }
 
 input[type="submit"] {
-    background: black; /* Black background for submit button */
-    color: goldenrod; /* Golden text color for submit button */
-    cursor: pointer;
-    font-weight: bold;
-    border: 2px solid goldenrod; /* Golden border for the button */
-    padding: 12px; /* Increased padding for better clickability */
-    margin-top: 10px; /* Added space above the submit button */
-    transition: background 0.3s ease, transform 0.3s ease; /* Add transition for hover effect */
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 input[type="submit"]:hover {
-    background: goldenrod; /* Golden background on hover */
-    color: black; /* Black text on hover */
-    transform: scale(1.05); 
+  background-color: #333;
 }
 
 a {
-    color: goldenrod;
-    text-decoration: none;
-    display: block;
-    margin-top: 10px;
+  display: inline-block;
+  margin: 10px 8px;
+  font-size: 13px;
+  color: #000;
+  text-decoration: none;
+  font-weight: 500;
 }
 
 a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
+}
 
 p {
-    color: #fff;
-}
+  margin-top: 15px;
+  font-size: 14px;
+  color: red;
 }

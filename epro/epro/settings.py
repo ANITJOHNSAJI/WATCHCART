@@ -135,5 +135,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'anitjohnsaji41@gmail.com'
 EMAIL_HOST_PASSWORD = 'vogl rwus lgcz memq'
 
+LOGIN_URL = 'userlogin'
+
 
 # login_url = 'login'

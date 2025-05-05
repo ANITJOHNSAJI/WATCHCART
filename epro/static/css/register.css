@@ -1,78 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    background-image: url('../images/bg.jpg');
-    background-size: cover;
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 div {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 30px; 
-    border-radius: 10px;
-    backdrop-filter: blur(10px); 
-    text-align: center;
-    width: 350px; 
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
 }
 
 h2 {
-    color: goldenrod;
-    margin-bottom: 20px; 
+  margin-bottom: 25px;
+  font-size: 26px;
+  color: #333;
 }
 
 form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
-input[type="text"], input[type="email"], input[type="password"], input[type="submit"] {
-    width: 90%; 
-    padding: 12px; 
-    margin: 12px 0; 
-    border: 2px solid black; 
-    border-radius: 5px;
-    background: rgba(0, 0, 0, 0.2); 
-    color: goldenrod; 
-    font-size: 16px; 
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  transition: border 0.3s ease;
 }
 
-input::placeholder {
-    color: goldenrod; 
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #000;
+  outline: none;
 }
 
 input[type="submit"] {
-    background: black;
-    color: goldenrod; 
-    cursor: pointer;
-    font-weight: bold;
-    border: 2px solid goldenrod; 
-    padding: 12px; 
-    margin-top: 10px; 
-    transition: background 0.3s ease, transform 0.3s ease; 
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 input[type="submit"]:hover {
-    background: goldenrod; 
-    color: black;
-    transform: scale(1.05);
-}
-
-a {
-    color: goldenrod; 
-    text-decoration: none;
-    display: block;
-    margin-top: 10px;
-}
-
-a:hover {
-    text-decoration: underline;
+  background-color: #333;
 }
 
 p {
-    color: #fff;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #000;
+}
+
+a {
+  color: #000;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }

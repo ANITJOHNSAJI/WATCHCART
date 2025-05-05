@@ -551,32 +551,53 @@ def cart_view(request):
     })
 
 @login_required(login_url='userlogin')
-def checkout(request):
-    # Get the cart items for the logged-in user
+def checkout_cart(request):
     cart_items = Cart.objects.filter(user=request.user)
-    
-    # Calculate the total price by summing up the prices of the cart items
     total_price = sum(item.get_total_price() for item in cart_items)
-    
-    # Render the checkout page with the cart items and total price
     return render(request, 'checkout.html', {'cart_items': cart_items, 'total_price': total_price})
 
+# Checkout a single product by id
+@login_required(login_url='userlogin')
+def checkout_single(request, id):
+    product = get_object_or_404(Product, id=id)
+    cart_items = [{
+        'product': product,
+        'quantity': 1,
+        'get_total_price': lambda: product.offerprice
+    }]
+    total_price = product.offerprice
+    return render(request, 'checkout.html', {'cart_items': cart_items, 'total_price': total_price, 'is_single': True, 'product_id': product.id})
 
+# Handle form submission
+@login_required(login_url='userlogin')
 def process_checkout(request):
     if request.method == 'POST':
-        # Handle checkout logic: Save the order, process payment, etc.
         address = request.POST.get('address')
         payment_method = request.POST.get('payment_method')
-        
-        # Example order creation (you would need to implement actual order processing)
-        order = Order.objects.create(
-            user=request.user,
-            shipping_address=address,
-            payment_method=payment_method,
-            total_price=total_price  # You'd calculate this beforehand
-        )
-        
-        # Redirect to an order confirmation page or summary page
+        is_single = request.POST.get('is_single') == 'True'
+        product_id = request.POST.get('product_id')
+
+        if is_single and product_id:
+            product = get_object_or_404(Product, id=product_id)
+            total_price = product.offerprice
+            # Save order logic here
+            order = Order.objects.create(
+                user=request.user,
+                shipping_address=address,
+                payment_method=payment_method,
+                total_price=total_price
+            )
+        else:
+            cart_items = Cart.objects.filter(user=request.user)
+            total_price = sum(item.get_total_price() for item in cart_items)
+            order = Order.objects.create(
+                user=request.user,
+                shipping_address=address,
+                payment_method=payment_method,
+                total_price=total_price
+            )
+            cart_items.delete()  # Clear cart
+
         return redirect('order_confirmation', order_id=order.id)
 
     return redirect('cart_view')
