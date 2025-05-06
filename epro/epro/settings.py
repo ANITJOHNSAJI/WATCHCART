@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import razorpay
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -136,6 +137,10 @@ EMAIL_HOST_USER = 'anitjohnsaji41@gmail.com'
 EMAIL_HOST_PASSWORD = 'vogl rwus lgcz memq'
 
 LOGIN_URL = 'userlogin'
+
+RAZORPAY_KEY_ID = 'rzp_test_bqdJzBSAOB7DkK'
+RAZORPAY_KEY_SECRET = 'QIJsqqBnMysvC93WjTjF7okH'
+
 
 
 # login_url = 'login'
