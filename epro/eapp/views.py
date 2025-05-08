@@ -496,12 +496,13 @@ def add_product(request):
 @login_required(login_url='userlogin')
 def add_to_cart(request, id):
     product = get_object_or_404(Product, id=id)
+    cart_item, created = Cart.objects.get_or_create(user=request.user, product=product, defaults={'quantity': 1})
 
-    cart_item, created = Cart.objects.get_or_create(user=request.user, product=product)
-
-    if cart_item.quantity < product.quantity:
+    if not created and cart_item.quantity < product.quantity:
         cart_item.quantity += 1
         cart_item.save()
+        messages.success(request, f"Quantity of {product.name} updated in your cart.")
+    elif created:
         messages.success(request, f"{product.name} has been added to your cart.")
     else:
         messages.error(request, "Sorry, this product is out of stock.")
