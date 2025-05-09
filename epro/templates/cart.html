@@ -30,43 +30,42 @@
                 </form>
             </div>
         </nav>
-
-        <!-- Cart Section -->
-        <div class="cart-container">
-            <h1>Your Cart</h1>
-            {% if cart_items %}
-            <div class="cart-items">
-                {% for item in cart_items %}
-                <div class="cart-item">
-                    <div class="cart-item-image">
-                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
-                    </div>
-                    <div class="cart-item-details">
-                        <p><strong>{{ item.product.name }}</strong></p>
-                        <p>₹<span class="item-price">{{ item.get_total_price }}</span></p>
-                        <p>Quantity: 
-                            <span class="quantity">{{ item.quantity }}</span>
-                        </p>
-                        <div class="quantity-actions">
-                            <a href="{% url 'increment_cart' item.id %}"><button class="quantity-btn">+</button></a>
-                            <a href="{% url 'decrement_cart' item.id %}"><button class="quantity-btn">-</button></a>
-                        </div>
-                    </div>
-                    <div class="cart-item-actions">
-                        <a href="{% url 'delete_cart_item' item.id %}"><button class="delete-btn">Remove</button></a>
-                        <a href="{% url 'checkout_single' item.product.id %}"><button class="buy-now-btn">Buy Now</button></a>
+<!-- Cart Section -->
+<div class="cart-container">
+    <h1>Your Cart</h1>
+    {% if cart_items %}
+    <div class="cart-content">
+        <div class="cart-items">
+            {% for item in cart_items %}
+            <div class="cart-item">
+                <div class="cart-item-image">
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                </div>
+                <div class="cart-item-details">
+                    <p class="product-name">{{ item.product.name }}</p>
+                    <p>₹<span class="item-price">{{ item.get_total_price }}</span></p>
+                    <p>Quantity: <span class="quantity">{{ item.quantity }}</span></p>
+                    <div class="quantity-actions">
+                        <a href="{% url 'increment_cart' item.id %}"><button class="quantity-btn">+</button></a>
+                        <a href="{% url 'decrement_cart' item.id %}"><button class="quantity-btn">-</button></a>
                     </div>
                 </div>
-                {% endfor %}
+                <div class="cart-item-actions">
+                    <a href="{% url 'delete_cart_item' item.id %}"><button class="delete-btn">Remove</button></a>
+                    <a href="{% url 'checkout_single' item.product.id %}"><button class="buy-now-btn">Buy Now</button></a>
+                </div>
             </div>
-            <div class="cart-summary">
-                <p><strong>Total Price:</strong> ₹<span id="total-price">{{ total_price }}</span></p>
-                <a href="{% url 'checkout' %}"><button class="checkout-btn">Checkout</button></a>
-            </div>
-            {% else %}
-            <p>Your cart is empty.</p>
-            {% endif %}
+            {% endfor %}
         </div>
+        <div class="cart-summary">
+            <p><strong>Total Price:</strong> ₹<span id="total-price">{{ total_price }}</span></p>
+            <a href="{% url 'checkout' %}"><button class="checkout-btn">Checkout</button></a>
+        </div>
+    </div>
+    {% else %}
+    <p class="empty-cart">Your cart is empty.</p>
+    {% endif %}
+</div>
 
         <!-- Footer -->
         <footer class="footer">
