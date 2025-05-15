@@ -8,11 +8,24 @@
   box-sizing: border-box;
 }
 
+/* Ensure full height for sticky footer */
+html {
+  height: 100%;
+}
+
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #fff;
   color: #000;
   line-height: 1.6;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content takes remaining space */
+main {
+  flex: 1 0 auto;
 }
 
 /* Navbar */
@@ -119,6 +132,8 @@ body {
   color: rgb(0, 0, 0);
   border-bottom: 2px solid rgb(0, 0, 0);
 }
+
+/* Cart Container */
 .cart-container {
   max-width: 1000px;
   margin: 40px auto;
@@ -126,9 +141,8 @@ body {
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-  border: 1px solid #ddd; /* Light gray border */
+  border: 1px solid #ddd;
 }
-
 
 .cart-container h1 {
   font-size: 30px;
@@ -251,10 +265,6 @@ body {
   transition: 0.2s ease;
 }
 
-/* .checkout-btn:hover {
-  background-color: #ffffff;
-} */
-
 .empty-cart {
   text-align: center;
   font-size: 16px;
@@ -264,6 +274,7 @@ body {
 
 /* Footer */
 .footer {
+  flex-shrink: 0;
   background-color: #000;
   color: #eee;
   display: flex;
